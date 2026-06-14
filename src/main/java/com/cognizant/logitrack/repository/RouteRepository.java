@@ -1,0 +1,15 @@
+package com.cognizant.logitrack.repository;
+
+import com.cognizant.logitrack.entity.Route;
+import com.cognizant.logitrack.enums.RouteMode;
+import com.cognizant.logitrack.enums.RouteStatus;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface RouteRepository extends JpaRepository<Route, Integer> {
+    List<Route> findByStatus(RouteStatus status);
+    List<Route> findByMode(RouteMode mode);
+}
