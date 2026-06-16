@@ -3,18 +3,18 @@ package com.cognizant.logitrack.serviceImplementation;
 import com.cognizant.logitrack.service.CarrierService;
 import com.cognizant.logitrack.exception.ResourceNotFoundException;
 import com.cognizant.logitrack.dto.CarrierDTO;
-import com.cognizant.logitrack.dto.CarrierRequestDTO;
 import com.cognizant.logitrack.entity.Carrier;
 import com.cognizant.logitrack.enums.CarrierStatus;
 import com.cognizant.logitrack.enums.RouteMode;
 import com.cognizant.logitrack.repository.CarrierRepository;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class CarrierServiceImpl implements CarrierService {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(CarrierServiceImpl.class);
     private final CarrierRepository carrierRepository;
 
     public CarrierServiceImpl(CarrierRepository carrierRepository) {
@@ -22,7 +22,7 @@ public class CarrierServiceImpl implements CarrierService {
     }
 
     @Override
-    public CarrierDTO addCarrier(CarrierRequestDTO dto) {
+    public CarrierDTO addCarrier(CarrierDTO dto) {
         Carrier carrier = Carrier.builder().name(dto.getName()).mode(dto.getMode()).serviceLevel(dto.getServiceLevel()).contactDetails(dto.getContactDetails()).status(CarrierStatus.ACTIVE).build();
         Carrier saved = carrierRepository.save(carrier);
         log.info("Carrier added: id={}, name={}", saved.getCarrierId(), saved.getName());

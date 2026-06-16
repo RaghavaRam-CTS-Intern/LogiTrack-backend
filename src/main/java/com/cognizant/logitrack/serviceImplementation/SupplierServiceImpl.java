@@ -3,17 +3,17 @@ package com.cognizant.logitrack.serviceImplementation;
 import com.cognizant.logitrack.service.SupplierService;
 import com.cognizant.logitrack.exception.ResourceNotFoundException;
 import com.cognizant.logitrack.dto.SupplierDTO;
-import com.cognizant.logitrack.dto.SupplierRequestDTO;
 import com.cognizant.logitrack.entity.Supplier;
 import com.cognizant.logitrack.enums.SupplierStatus;
 import com.cognizant.logitrack.repository.SupplierRepository;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class SupplierServiceImpl implements SupplierService {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SupplierServiceImpl.class);
     private final SupplierRepository supplierRepository;
 
     public SupplierServiceImpl(SupplierRepository supplierRepository) {
@@ -21,7 +21,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public SupplierDTO addSupplier(SupplierRequestDTO dto) {
+    public SupplierDTO addSupplier(SupplierDTO dto) {
         Supplier supplier = Supplier.builder().name(dto.getName()).category(dto.getCategory()).contactDetails(dto.getContactDetails()).leadTimeDays(dto.getLeadTimeDays()).status(SupplierStatus.ACTIVE).build();
         Supplier saved = supplierRepository.save(supplier);
         log.info("Supplier added: id={}, name={}", saved.getSupplierId(), saved.getName());

@@ -1,7 +1,6 @@
 package com.cognizant.logitrack.controller;
 
 import com.cognizant.logitrack.dto.RouteDTO;
-import com.cognizant.logitrack.dto.RouteRequestDTO;
 import com.cognizant.logitrack.enums.RouteMode;
 import com.cognizant.logitrack.enums.RouteStatus;
 import com.cognizant.logitrack.service.RouteService;
@@ -24,7 +23,7 @@ public class RouteController {
     }
 
     @PostMapping
-    public ResponseEntity<RouteDTO> create(@Valid @RequestBody RouteRequestDTO dto) {
+    public ResponseEntity<RouteDTO> create(@Valid @RequestBody RouteDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(routeService.addRoute(dto));
     }
 

@@ -1,9 +1,7 @@
 package com.cognizant.logitrack;
 
 import com.cognizant.logitrack.dto.DeliveryEventDTO;
-import com.cognizant.logitrack.dto.DeliveryEventRequestDTO;
 import com.cognizant.logitrack.dto.ShipmentDTO;
-import com.cognizant.logitrack.dto.ShipmentRequestDTO;
 import com.cognizant.logitrack.entity.DeliveryEvent;
 import com.cognizant.logitrack.entity.FreightOrder;
 import com.cognizant.logitrack.entity.Shipment;
@@ -52,7 +50,7 @@ class ShipmentServiceTest {
             return s;
         });
 
-        ShipmentRequestDTO dto = new ShipmentRequestDTO(1, 5, 7, 9, LocalDate.now(), LocalDate.now().plusDays(3));
+        ShipmentDTO dto = ShipmentDTO.builder().freightOrderId(1).carrierId(5).vehicleId(7).driverId(9).dispatchDate(LocalDate.now()).estimatedArrival(LocalDate.now().plusDays(3)).build();
         ShipmentDTO result = shipmentService.createShipment(dto);
 
         assertNotNull(result);
@@ -81,7 +79,7 @@ class ShipmentServiceTest {
             return e;
         });
 
-        DeliveryEventRequestDTO dto = new DeliveryEventRequestDTO(EventType.PICKUP, 100, "Picked up");
+        DeliveryEventDTO dto = DeliveryEventDTO.builder().eventType(EventType.PICKUP).locationId(100).notes("Picked up").build();
         DeliveryEventDTO result = shipmentService.addDeliveryEvent(1, dto);
 
         assertNotNull(result);

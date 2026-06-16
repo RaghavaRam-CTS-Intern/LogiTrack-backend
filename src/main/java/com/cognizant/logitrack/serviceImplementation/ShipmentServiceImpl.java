@@ -4,9 +4,7 @@ import com.cognizant.logitrack.service.ShipmentService;
 import com.cognizant.logitrack.exception.BadRequestException;
 import com.cognizant.logitrack.exception.ResourceNotFoundException;
 import com.cognizant.logitrack.dto.DeliveryEventDTO;
-import com.cognizant.logitrack.dto.DeliveryEventRequestDTO;
 import com.cognizant.logitrack.dto.ShipmentDTO;
-import com.cognizant.logitrack.dto.ShipmentRequestDTO;
 import com.cognizant.logitrack.entity.DeliveryEvent;
 import com.cognizant.logitrack.entity.FreightOrder;
 import com.cognizant.logitrack.entity.Shipment;
@@ -16,13 +14,14 @@ import com.cognizant.logitrack.repository.FreightOrderRepository;
 import com.cognizant.logitrack.repository.ShipmentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@Slf4j
 public class ShipmentServiceImpl implements ShipmentService {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ShipmentServiceImpl.class);
     private final ShipmentRepository shipmentRepository;
     private final FreightOrderRepository freightOrderRepository;
     private final DeliveryEventRepository deliveryEventRepository;
@@ -34,7 +33,7 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
 
     @Override
-    public ShipmentDTO createShipment(ShipmentRequestDTO dto) {
+    public ShipmentDTO createShipment(ShipmentDTO dto) {
         FreightOrder freightOrder = freightOrderRepository.findById(dto.getFreightOrderId()).orElseThrow(() -> new BadRequestException("Freight order not found: " + dto.getFreightOrderId()));
         Shipment shipment = Shipment.builder().freightOrder(freightOrder).carrierId(dto.getCarrierId()).vehicleId(dto.getVehicleId()).driverId(dto.getDriverId()).dispatchDate(dto.getDispatchDate()).estimatedArrival(dto.getEstimatedArrival()).status(ShipmentStatus.DISPATCHED).build();
         Shipment saved = shipmentRepository.save(shipment);
@@ -57,7 +56,7 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
 
     @Override
-    public DeliveryEventDTO addDeliveryEvent(Integer shipmentId, DeliveryEventRequestDTO dto) {
+    public DeliveryEventDTO addDeliveryEvent(Integer shipmentId, DeliveryEventDTO dto) {
         Shipment shipment = findEntity(shipmentId);
         DeliveryEvent event = DeliveryEvent.builder().shipment(shipment).eventType(dto.getEventType()).locationId(dto.getLocationId()).notes(dto.getNotes()).build();
         DeliveryEvent saved = deliveryEventRepository.save(event);

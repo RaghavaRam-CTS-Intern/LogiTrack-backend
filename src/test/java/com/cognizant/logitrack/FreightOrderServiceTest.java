@@ -2,7 +2,6 @@ package com.cognizant.logitrack;
 
 import com.cognizant.logitrack.exception.BadRequestException;
 import com.cognizant.logitrack.dto.FreightOrderDTO;
-import com.cognizant.logitrack.dto.FreightOrderRequestDTO;
 import com.cognizant.logitrack.entity.FreightOrder;
 import com.cognizant.logitrack.enums.FreightOrderStatus;
 import com.cognizant.logitrack.repository.FreightOrderRepository;
@@ -31,9 +30,8 @@ class FreightOrderServiceTest {
     @InjectMocks
     private FreightOrderServiceImpl freightOrderService;
 
-    private FreightOrderRequestDTO request() {
-        return new FreightOrderRequestDTO(1, 10, 20, "Electronics",
-                new BigDecimal("100.5"), new BigDecimal("2.0"), LocalDate.now().plusDays(5));
+    private FreightOrderDTO request() {
+        return FreightOrderDTO.builder().shipperId(1).originLocationId(10).destinationLocationId(20).cargoDescription("Electronics").weight(new BigDecimal("100.5")).volume(new BigDecimal("2.0")).requiredDeliveryDate(LocalDate.now().plusDays(5)).build();
     }
 
     @Test

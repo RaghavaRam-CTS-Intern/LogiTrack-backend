@@ -1,6 +1,7 @@
 package com.cognizant.logitrack.controller;
 
 import com.cognizant.logitrack.dto.AuditLogDTO;
+
 import com.cognizant.logitrack.service.AuditLogService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/audit-logs")
 @CrossOrigin(origins = "http://localhost:3000")
+
 public class AuditLogController {
 
     private final AuditLogService auditLogService;
@@ -47,7 +49,7 @@ public class AuditLogController {
     @PostMapping
     public ResponseEntity<AuditLogDTO> logAction(@RequestBody AuditLogDTO dto) {
         AuditLogDTO created = auditLogService.logAction(
-                dto.getUserId(), dto.getAction(), dto.getEntityType(), dto.getEntityId());
+                dto.getUserId(), dto.getAction(), dto.getEntityType());
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 }

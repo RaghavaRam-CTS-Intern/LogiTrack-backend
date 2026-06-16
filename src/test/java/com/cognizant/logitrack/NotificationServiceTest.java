@@ -1,7 +1,6 @@
 package com.cognizant.logitrack;
 
 import com.cognizant.logitrack.dto.NotificationDTO;
-import com.cognizant.logitrack.dto.NotificationRequestDTO;
 import com.cognizant.logitrack.entity.Notification;
 import com.cognizant.logitrack.enums.NotificationCategory;
 import com.cognizant.logitrack.enums.NotificationStatus;
@@ -38,7 +37,7 @@ class NotificationServiceTest {
             return n;
         });
 
-        NotificationRequestDTO dto = new NotificationRequestDTO(1, "Test message", NotificationCategory.SHIPMENT);
+        NotificationDTO dto = NotificationDTO.builder().userId(1).message("Test message").category(NotificationCategory.SHIPMENT).build();
         NotificationDTO result = notificationService.sendNotification(dto);
 
         assertNotNull(result);

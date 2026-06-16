@@ -3,17 +3,17 @@ package com.cognizant.logitrack.serviceImplementation;
 import com.cognizant.logitrack.service.PickListService;
 import com.cognizant.logitrack.exception.ResourceNotFoundException;
 import com.cognizant.logitrack.dto.PickListDTO;
-import com.cognizant.logitrack.dto.PickListRequestDTO;
 import com.cognizant.logitrack.entity.PickList;
 import com.cognizant.logitrack.enums.PickListStatus;
 import com.cognizant.logitrack.repository.PickListRepository;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class PickListServiceImpl implements PickListService {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(PickListServiceImpl.class);
     private final PickListRepository pickListRepository;
 
     public PickListServiceImpl(PickListRepository pickListRepository) {
@@ -21,7 +21,7 @@ public class PickListServiceImpl implements PickListService {
     }
 
     @Override
-    public PickListDTO createPickList(PickListRequestDTO dto) {
+    public PickListDTO createPickList(PickListDTO dto) {
         PickList pickList = PickList.builder().freightOrderId(dto.getFreightOrderId()).warehouseId(dto.getWarehouseId()).assignedTo(dto.getAssignedTo()).status(PickListStatus.OPEN).build();
         PickList saved = pickListRepository.save(pickList);
         log.info("Pick list created: id={}", saved.getPickListId());

@@ -2,7 +2,6 @@ package com.cognizant.logitrack;
 
 import com.cognizant.logitrack.exception.ResourceNotFoundException;
 import com.cognizant.logitrack.dto.CarrierDTO;
-import com.cognizant.logitrack.dto.CarrierRequestDTO;
 import com.cognizant.logitrack.entity.Carrier;
 import com.cognizant.logitrack.enums.CarrierServiceLevel;
 import com.cognizant.logitrack.enums.CarrierStatus;
@@ -39,8 +38,8 @@ class CarrierServiceTest {
             return c;
         });
 
-        CarrierRequestDTO dto = new CarrierRequestDTO("FastCarrier", RouteMode.ROAD,
-                CarrierServiceLevel.EXPRESS, "contact@fast.com");
+        CarrierDTO dto = CarrierDTO.builder().name("FastCarrier").mode(RouteMode.ROAD)
+                .serviceLevel(CarrierServiceLevel.EXPRESS).contactDetails("contact@fast.com").build();
         CarrierDTO result = carrierService.addCarrier(dto);
 
         assertNotNull(result);

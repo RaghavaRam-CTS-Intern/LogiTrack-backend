@@ -4,7 +4,6 @@ import com.cognizant.logitrack.service.RateCardService;
 import com.cognizant.logitrack.exception.BadRequestException;
 import com.cognizant.logitrack.exception.ResourceNotFoundException;
 import com.cognizant.logitrack.dto.RateCardDTO;
-import com.cognizant.logitrack.dto.RateCardRequestDTO;
 import com.cognizant.logitrack.entity.Carrier;
 import com.cognizant.logitrack.entity.RateCard;
 import com.cognizant.logitrack.entity.Route;
@@ -13,12 +12,13 @@ import com.cognizant.logitrack.repository.CarrierRepository;
 import com.cognizant.logitrack.repository.RateCardRepository;
 import com.cognizant.logitrack.repository.RouteRepository;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class RateCardServiceImpl implements RateCardService {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(RateCardServiceImpl.class);
     private final RateCardRepository rateCardRepository;
     private final CarrierRepository carrierRepository;
     private final RouteRepository routeRepository;
@@ -30,7 +30,7 @@ public class RateCardServiceImpl implements RateCardService {
     }
 
     @Override
-    public RateCardDTO addRateCard(RateCardRequestDTO dto) {
+    public RateCardDTO addRateCard(RateCardDTO dto) {
         Carrier carrier = carrierRepository.findById(dto.getCarrierId()).orElseThrow(() -> new BadRequestException("Carrier not found"));
         Route route = routeRepository.findById(dto.getRouteId()).orElseThrow(() -> new BadRequestException("Route not found"));
         RateCard rateCard = RateCard.builder().carrier(carrier).route(route).baseRate(dto.getBaseRate()).weightSlab(dto.getWeightSlab()).effectiveDate(dto.getEffectiveDate()).expiryDate(dto.getExpiryDate()).status(RateCardStatus.ACTIVE).build();

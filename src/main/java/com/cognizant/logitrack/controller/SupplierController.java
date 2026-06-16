@@ -1,7 +1,6 @@
 package com.cognizant.logitrack.controller;
 
 import com.cognizant.logitrack.dto.SupplierDTO;
-import com.cognizant.logitrack.dto.SupplierRequestDTO;
 import com.cognizant.logitrack.enums.SupplierStatus;
 import com.cognizant.logitrack.service.SupplierService;
 import jakarta.validation.Valid;
@@ -23,7 +22,7 @@ public class SupplierController {
     }
 
     @PostMapping
-    public ResponseEntity<SupplierDTO> create(@Valid @RequestBody SupplierRequestDTO dto) {
+    public ResponseEntity<SupplierDTO> create(@Valid @RequestBody SupplierDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(supplierService.addSupplier(dto));
     }
 

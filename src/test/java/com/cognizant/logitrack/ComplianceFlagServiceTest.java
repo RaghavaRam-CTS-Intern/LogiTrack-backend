@@ -1,7 +1,6 @@
 package com.cognizant.logitrack;
 
 import com.cognizant.logitrack.dto.ComplianceFlagDTO;
-import com.cognizant.logitrack.dto.ComplianceFlagRequestDTO;
 import com.cognizant.logitrack.entity.ComplianceFlag;
 import com.cognizant.logitrack.enums.FlagSeverity;
 import com.cognizant.logitrack.enums.FlagStatus;
@@ -37,7 +36,7 @@ class ComplianceFlagServiceTest {
             return f;
         });
 
-        ComplianceFlagRequestDTO dto = new ComplianceFlagRequestDTO(1, "MISSING_DOC", FlagSeverity.HIGH);
+        ComplianceFlagDTO dto = ComplianceFlagDTO.builder().shipmentId(1).flagType("MISSING_DOC").severity(FlagSeverity.HIGH).build();
         ComplianceFlagDTO result = flagService.raiseFlag(dto);
 
         assertNotNull(result);

@@ -1,7 +1,6 @@
 package com.cognizant.logitrack.controller;
 
 import com.cognizant.logitrack.dto.RateCardDTO;
-import com.cognizant.logitrack.dto.RateCardRequestDTO;
 import com.cognizant.logitrack.enums.RateCardStatus;
 import com.cognizant.logitrack.service.RateCardService;
 import jakarta.validation.Valid;
@@ -23,7 +22,7 @@ public class RateCardController {
     }
 
     @PostMapping
-    public ResponseEntity<RateCardDTO> create(@Valid @RequestBody RateCardRequestDTO dto) {
+    public ResponseEntity<RateCardDTO> create(@Valid @RequestBody RateCardDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(rateCardService.addRateCard(dto));
     }
 

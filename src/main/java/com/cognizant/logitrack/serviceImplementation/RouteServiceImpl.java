@@ -3,18 +3,18 @@ package com.cognizant.logitrack.serviceImplementation;
 import com.cognizant.logitrack.service.RouteService;
 import com.cognizant.logitrack.exception.ResourceNotFoundException;
 import com.cognizant.logitrack.dto.RouteDTO;
-import com.cognizant.logitrack.dto.RouteRequestDTO;
 import com.cognizant.logitrack.entity.Route;
 import com.cognizant.logitrack.enums.RouteMode;
 import com.cognizant.logitrack.enums.RouteStatus;
 import com.cognizant.logitrack.repository.RouteRepository;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class RouteServiceImpl implements RouteService {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(RouteServiceImpl.class);
     private final RouteRepository routeRepository;
 
     public RouteServiceImpl(RouteRepository routeRepository) {
@@ -22,7 +22,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public RouteDTO addRoute(RouteRequestDTO dto) {
+    public RouteDTO addRoute(RouteDTO dto) {
         Route route = Route.builder().originHubId(dto.getOriginHubId()).destinationHubId(dto.getDestinationHubId()).transitDays(dto.getTransitDays()).mode(dto.getMode()).status(RouteStatus.ACTIVE).build();
         Route saved = routeRepository.save(route);
         log.info("Route added: id={}", saved.getRouteId());

@@ -1,12 +1,11 @@
 package com.cognizant.logitrack.controller;
 
 import com.cognizant.logitrack.dto.DeliveryEventDTO;
-import com.cognizant.logitrack.dto.DeliveryEventRequestDTO;
 import com.cognizant.logitrack.dto.ShipmentDTO;
-import com.cognizant.logitrack.dto.ShipmentRequestDTO;
 import com.cognizant.logitrack.enums.ShipmentStatus;
 import com.cognizant.logitrack.service.ShipmentService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/shipments")
 @CrossOrigin(origins = "http://localhost:3000")
+@Slf4j
 public class ShipmentController {
 
     private final ShipmentService shipmentService;
@@ -25,7 +25,8 @@ public class ShipmentController {
     }
 
     @PostMapping
-    public ResponseEntity<ShipmentDTO> create(@Valid @RequestBody ShipmentRequestDTO dto) {
+    public ResponseEntity<ShipmentDTO> create(@Valid @RequestBody ShipmentDTO dto) {
+        log.info("Creating shipment for freight order {}", dto.getFreightOrderId());
         return ResponseEntity.status(HttpStatus.CREATED).body(shipmentService.createShipment(dto));
     }
 
@@ -41,7 +42,7 @@ public class ShipmentController {
 
     @PostMapping("/{shipmentId}/events")
     public ResponseEntity<DeliveryEventDTO> addEvent(@PathVariable Integer shipmentId,
-                                                     @Valid @RequestBody DeliveryEventRequestDTO dto) {
+                                                     @Valid @RequestBody DeliveryEventDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(shipmentService.addDeliveryEvent(shipmentId, dto));
     }
 

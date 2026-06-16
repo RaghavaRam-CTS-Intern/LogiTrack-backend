@@ -3,17 +3,17 @@ package com.cognizant.logitrack.serviceImplementation;
 import com.cognizant.logitrack.service.ShipmentDocumentService;
 import com.cognizant.logitrack.exception.ResourceNotFoundException;
 import com.cognizant.logitrack.dto.ShipmentDocumentDTO;
-import com.cognizant.logitrack.dto.ShipmentDocumentRequestDTO;
 import com.cognizant.logitrack.entity.ShipmentDocument;
 import com.cognizant.logitrack.enums.DocumentStatus;
 import com.cognizant.logitrack.repository.ShipmentDocumentRepository;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class ShipmentDocumentServiceImpl implements ShipmentDocumentService {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ShipmentDocumentServiceImpl.class);
     private final ShipmentDocumentRepository documentRepository;
 
     public ShipmentDocumentServiceImpl(ShipmentDocumentRepository documentRepository) {
@@ -21,7 +21,7 @@ public class ShipmentDocumentServiceImpl implements ShipmentDocumentService {
     }
 
     @Override
-    public ShipmentDocumentDTO uploadDocument(ShipmentDocumentRequestDTO dto) {
+    public ShipmentDocumentDTO uploadDocument(ShipmentDocumentDTO dto) {
         ShipmentDocument document = ShipmentDocument.builder().shipmentId(dto.getShipmentId()).documentType(dto.getDocumentType()).filePath(dto.getFilePath()).submittedDate(dto.getSubmittedDate()).status(DocumentStatus.PENDING).build();
         ShipmentDocument saved = documentRepository.save(document);
         log.info("Document uploaded: id={}, shipmentId={}", saved.getDocumentId(), saved.getShipmentId());

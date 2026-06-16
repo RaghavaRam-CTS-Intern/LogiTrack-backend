@@ -1,7 +1,6 @@
 package com.cognizant.logitrack.controller;
 
 import com.cognizant.logitrack.dto.InboundReceiptDTO;
-import com.cognizant.logitrack.dto.InboundReceiptRequestDTO;
 import com.cognizant.logitrack.enums.ReceiptStatus;
 import com.cognizant.logitrack.service.InboundReceiptService;
 import jakarta.validation.Valid;
@@ -23,7 +22,7 @@ public class InboundReceiptController {
     }
 
     @PostMapping
-    public ResponseEntity<InboundReceiptDTO> create(@Valid @RequestBody InboundReceiptRequestDTO dto) {
+    public ResponseEntity<InboundReceiptDTO> create(@Valid @RequestBody InboundReceiptDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(inboundReceiptService.createReceipt(dto));
     }
 

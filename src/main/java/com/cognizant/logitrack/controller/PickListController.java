@@ -1,7 +1,6 @@
 package com.cognizant.logitrack.controller;
 
 import com.cognizant.logitrack.dto.PickListDTO;
-import com.cognizant.logitrack.dto.PickListRequestDTO;
 import com.cognizant.logitrack.enums.PickListStatus;
 import com.cognizant.logitrack.service.PickListService;
 import jakarta.validation.Valid;
@@ -23,7 +22,7 @@ public class PickListController {
     }
 
     @PostMapping
-    public ResponseEntity<PickListDTO> create(@Valid @RequestBody PickListRequestDTO dto) {
+    public ResponseEntity<PickListDTO> create(@Valid @RequestBody PickListDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(pickListService.createPickList(dto));
     }
 

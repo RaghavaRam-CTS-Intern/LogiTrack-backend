@@ -2,7 +2,6 @@ package com.cognizant.logitrack;
 
 import com.cognizant.logitrack.exception.BadRequestException;
 import com.cognizant.logitrack.dto.PurchaseOrderDTO;
-import com.cognizant.logitrack.dto.PurchaseOrderRequestDTO;
 import com.cognizant.logitrack.entity.PurchaseOrder;
 import com.cognizant.logitrack.entity.Supplier;
 import com.cognizant.logitrack.enums.POStatus;
@@ -36,9 +35,9 @@ class PurchaseOrderServiceTest {
     @InjectMocks
     private PurchaseOrderServiceImpl purchaseOrderService;
 
-    private PurchaseOrderRequestDTO request() {
-        return new PurchaseOrderRequestDTO(1, 1, "[]", new BigDecimal("1000.0"),
-                LocalDate.now(), LocalDate.now().plusDays(10));
+    private PurchaseOrderDTO request() {
+        return PurchaseOrderDTO.builder().supplierId(1).warehouseId(1).lineItems("[]").totalValue(new BigDecimal("1000.0"))
+                .orderDate(LocalDate.now()).expectedDelivery(LocalDate.now().plusDays(10)).build();
     }
 
     @Test

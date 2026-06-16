@@ -1,7 +1,6 @@
 package com.cognizant.logitrack;
 
 import com.cognizant.logitrack.dto.RouteDTO;
-import com.cognizant.logitrack.dto.RouteRequestDTO;
 import com.cognizant.logitrack.entity.Route;
 import com.cognizant.logitrack.enums.RouteMode;
 import com.cognizant.logitrack.enums.RouteStatus;
@@ -38,7 +37,7 @@ class RouteServiceTest {
             return r;
         });
 
-        RouteRequestDTO dto = new RouteRequestDTO(1, 2, 3, RouteMode.ROAD);
+        RouteDTO dto = RouteDTO.builder().originHubId(1).destinationHubId(2).transitDays(3).mode(RouteMode.ROAD).build();
         RouteDTO result = routeService.addRoute(dto);
 
         assertNotNull(result);

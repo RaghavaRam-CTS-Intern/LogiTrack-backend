@@ -1,7 +1,6 @@
 package com.cognizant.logitrack.controller;
 
 import com.cognizant.logitrack.dto.CarrierDTO;
-import com.cognizant.logitrack.dto.CarrierRequestDTO;
 import com.cognizant.logitrack.enums.CarrierStatus;
 import com.cognizant.logitrack.enums.RouteMode;
 import com.cognizant.logitrack.service.CarrierService;
@@ -24,7 +23,7 @@ public class CarrierController {
     }
 
     @PostMapping
-    public ResponseEntity<CarrierDTO> create(@Valid @RequestBody CarrierRequestDTO dto) {
+    public ResponseEntity<CarrierDTO> create(@Valid @RequestBody CarrierDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(carrierService.addCarrier(dto));
     }
 

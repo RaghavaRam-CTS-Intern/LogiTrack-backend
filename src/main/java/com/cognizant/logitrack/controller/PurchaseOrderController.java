@@ -1,7 +1,6 @@
 package com.cognizant.logitrack.controller;
 
 import com.cognizant.logitrack.dto.PurchaseOrderDTO;
-import com.cognizant.logitrack.dto.PurchaseOrderRequestDTO;
 import com.cognizant.logitrack.enums.POStatus;
 import com.cognizant.logitrack.service.PurchaseOrderService;
 import jakarta.validation.Valid;
@@ -23,7 +22,7 @@ public class PurchaseOrderController {
     }
 
     @PostMapping
-    public ResponseEntity<PurchaseOrderDTO> create(@Valid @RequestBody PurchaseOrderRequestDTO dto) {
+    public ResponseEntity<PurchaseOrderDTO> create(@Valid @RequestBody PurchaseOrderDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(purchaseOrderService.createPO(dto));
     }
 

@@ -2,7 +2,6 @@ package com.cognizant.logitrack;
 
 import com.cognizant.logitrack.exception.ResourceNotFoundException;
 import com.cognizant.logitrack.dto.SupplierDTO;
-import com.cognizant.logitrack.dto.SupplierRequestDTO;
 import com.cognizant.logitrack.entity.Supplier;
 import com.cognizant.logitrack.enums.SupplierStatus;
 import com.cognizant.logitrack.repository.SupplierRepository;
@@ -37,7 +36,7 @@ class SupplierServiceTest {
             return s;
         });
 
-        SupplierRequestDTO dto = new SupplierRequestDTO("Acme", "Electronics", "acme@x.com", 7);
+        SupplierDTO dto = SupplierDTO.builder().name("Acme").category("Electronics").contactDetails("acme@x.com").leadTimeDays(7).build();
         SupplierDTO result = supplierService.addSupplier(dto);
 
         assertNotNull(result);

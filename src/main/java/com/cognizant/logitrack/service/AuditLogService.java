@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AuditLogService {
-    AuditLogDTO logAction(Integer userId, String action, String entityType, Integer entityId);
+    AuditLogDTO logAction(Integer userId, String action, String entityType);
     Page<AuditLogDTO> getAllLogs(Pageable pageable);
     List<AuditLogDTO> getByUserId(Integer userId);
     List<AuditLogDTO> getByAction(String action);

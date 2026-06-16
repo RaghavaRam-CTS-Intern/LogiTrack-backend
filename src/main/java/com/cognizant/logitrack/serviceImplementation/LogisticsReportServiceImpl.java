@@ -9,6 +9,7 @@ import com.cognizant.logitrack.repository.LogisticsReportRepository;
 import com.cognizant.logitrack.entity.AuditLog;
 import com.cognizant.logitrack.repository.AuditLogRepository;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -17,8 +18,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class LogisticsReportServiceImpl implements LogisticsReportService {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(LogisticsReportServiceImpl.class);
     private final LogisticsReportRepository reportRepository;
     private final AuditLogRepository auditLogRepository;
 

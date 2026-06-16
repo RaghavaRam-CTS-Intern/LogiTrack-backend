@@ -1,9 +1,9 @@
 package com.cognizant.logitrack.controller;
 
 import com.cognizant.logitrack.dto.FreightOrderDTO;
-import com.cognizant.logitrack.dto.FreightOrderRequestDTO;
 import com.cognizant.logitrack.service.FreightOrderService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/freight-orders")
 @CrossOrigin(origins = "http://localhost:3000")
+@Slf4j
 public class FreightOrderController {
 
     private final FreightOrderService freightOrderService;
@@ -22,7 +23,8 @@ public class FreightOrderController {
     }
 
     @PostMapping
-    public ResponseEntity<FreightOrderDTO> create(@Valid @RequestBody FreightOrderRequestDTO dto) {
+    public ResponseEntity<FreightOrderDTO> create(@Valid @RequestBody FreightOrderDTO dto) {
+        log.info("Creating freight order for shipper {}", dto.getShipperId());
         return ResponseEntity.status(HttpStatus.CREATED).body(freightOrderService.createFreightOrder(dto));
     }
 

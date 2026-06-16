@@ -3,7 +3,11 @@ package com.cognizant.logitrack.serviceImplementation;
 import com.cognizant.logitrack.service.AuditLogService;
 import com.cognizant.logitrack.dto.AuditLogDTO;
 import com.cognizant.logitrack.entity.AuditLog;
+import com.cognizant.logitrack.entity.User;
+import com.cognizant.logitrack.exception.ResourceNotFoundException;
 import com.cognizant.logitrack.repository.AuditLogRepository;
+import com.cognizant.logitrack.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -12,17 +16,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class AuditLogServiceImpl implements AuditLogService {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AuditLogServiceImpl.class);
     private final AuditLogRepository auditLogRepository;
+    private final UserRepository userRepository;
 
-    public AuditLogServiceImpl(AuditLogRepository auditLogRepository) {
+    public AuditLogServiceImpl(AuditLogRepository auditLogRepository, UserRepository userRepository) {
         this.auditLogRepository = auditLogRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public AuditLogDTO logAction(Integer userId, String action, String entityType, Integer entityId) {
-        AuditLog auditLog = AuditLog.builder().userId(userId).action(action).entityType(entityType).entityId(entityId).build();
+    public AuditLogDTO logAction(Integer userId, String action, String entityType) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+        AuditLog auditLog = AuditLog.builder().user(user).action(action).entityType(entityType).build();
         AuditLog saved = auditLogRepository.save(auditLog);
         log.debug("Audit log recorded: userId={}, action={}, entityType={}", userId, action, entityType);
         return toDTO(saved);
@@ -48,7 +56,8 @@ public class AuditLogServiceImpl implements AuditLogService {
         return auditLogRepository.findByTimestampBetween(from, to).stream().map(this::toDTO).collect(Collectors.toList());
     }
 
-    private AuditLogDTO toDTO(AuditLog log) {
-        return AuditLogDTO.builder().auditId(log.getAuditId()).userId(log.getUserId()).action(log.getAction()).entityType(log.getEntityType()).entityId(log.getEntityId()).timestamp(log.getTimestamp()).build();
+    private AuditLogDTO toDTO(AuditLog auditLog) {
+        Integer userId = auditLog.getUser() != null ? auditLog.getUser().getUserId() : null;
+        return AuditLogDTO.builder().auditId(auditLog.getAuditId()).userId(userId).action(auditLog.getAction()).entityType(auditLog.getEntityType()).timestamp(auditLog.getTimestamp()).build();
     }
 }

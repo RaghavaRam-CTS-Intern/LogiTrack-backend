@@ -3,18 +3,18 @@ package com.cognizant.logitrack.serviceImplementation;
 import com.cognizant.logitrack.service.NotificationService;
 import com.cognizant.logitrack.exception.ResourceNotFoundException;
 import com.cognizant.logitrack.dto.NotificationDTO;
-import com.cognizant.logitrack.dto.NotificationRequestDTO;
 import com.cognizant.logitrack.entity.Notification;
 import com.cognizant.logitrack.enums.NotificationStatus;
 import com.cognizant.logitrack.repository.NotificationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class NotificationServiceImpl implements NotificationService {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(NotificationServiceImpl.class);
     private final NotificationRepository notificationRepository;
 
     public NotificationServiceImpl(NotificationRepository notificationRepository) {
@@ -22,7 +22,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public NotificationDTO sendNotification(NotificationRequestDTO dto) {
+    public NotificationDTO sendNotification(NotificationDTO dto) {
         Notification notification = Notification.builder().userId(dto.getUserId()).message(dto.getMessage()).category(dto.getCategory()).status(NotificationStatus.UNREAD).build();
         Notification saved = notificationRepository.save(notification);
         log.info("Notification sent to user {}: {}", dto.getUserId(), dto.getCategory());

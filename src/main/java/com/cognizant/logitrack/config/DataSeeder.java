@@ -22,6 +22,7 @@ import com.cognizant.logitrack.enums.SupplierStatus;
 import com.cognizant.logitrack.repository.SupplierRepository;
 import com.cognizant.logitrack.entity.WarehouseInventory;
 import com.cognizant.logitrack.repository.WarehouseInventoryRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -31,8 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@Slf4j
 public class DataSeeder implements CommandLineRunner {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(DataSeeder.class);
     private final UserRepository userRepository;
     private final AuditLogRepository auditLogRepository;
     private final CarrierRepository carrierRepository;
@@ -73,7 +74,7 @@ public class DataSeeder implements CommandLineRunner {
             return;
         }
         String hash = passwordEncoder.encode("password123");
-        Role[] roles = {Role.SHIPPER, Role.COORDINATOR, Role.WAREHOUSEOPS, Role.DRIVER, Role.ANALYST};
+        Role[] roles = {Role.SHIPPER, Role.COORDINATOR, Role.WAREHOUSEOPS, Role.DRIVER, Role.COMPLIANCE, Role.ANALYST, Role.ADMIN};
         for (Role role : roles) {
             String emailPrefix = role.name().toLowerCase();
             User user = User.builder().name(role.name() + " User").role(role).email(emailPrefix + "@logitrack.com").phone("9000000000").hubId(1).passwordHash(hash).status(UserStatus.ACTIVE).build();
@@ -86,10 +87,16 @@ public class DataSeeder implements CommandLineRunner {
         if (auditLogRepository.count() != 0) {
             return;
         }
+        List<User> users = userRepository.findAll();
+        if (users.isEmpty()) {
+            return;
+        }
+        User u1 = users.get(0);
+        User u2 = users.size() > 1 ? users.get(1) : u1;
         List<AuditLog> logs = new ArrayList<>();
-        logs.add(AuditLog.builder().userId(1).action("USER_CREATED").entityType("User").entityId(1).build());
-        logs.add(AuditLog.builder().userId(1).action("LOGIN").entityType("User").entityId(1).build());
-        logs.add(AuditLog.builder().userId(2).action("FREIGHT_ORDER_CREATED").entityType("FreightOrder").entityId(1).build());
+        logs.add(AuditLog.builder().user(u1).action("USER_CREATED").entityType("User").build());
+        logs.add(AuditLog.builder().user(u1).action("LOGIN").entityType("User").build());
+        logs.add(AuditLog.builder().user(u2).action("FREIGHT_ORDER_CREATED").entityType("FreightOrder").build());
         auditLogRepository.saveAll(logs);
         log.info("Seeded {} audit logs", logs.size());
     }

@@ -1,7 +1,6 @@
 package com.cognizant.logitrack;
 
 import com.cognizant.logitrack.dto.PickListDTO;
-import com.cognizant.logitrack.dto.PickListRequestDTO;
 import com.cognizant.logitrack.entity.PickList;
 import com.cognizant.logitrack.enums.PickListStatus;
 import com.cognizant.logitrack.repository.PickListRepository;
@@ -36,7 +35,7 @@ class PickListServiceTest {
             return p;
         });
 
-        PickListRequestDTO dto = new PickListRequestDTO(1, 1, null);
+        PickListDTO dto = PickListDTO.builder().freightOrderId(1).warehouseId(1).build();
         PickListDTO result = pickListService.createPickList(dto);
 
         assertNotNull(result);

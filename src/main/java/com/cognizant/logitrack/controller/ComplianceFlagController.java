@@ -1,7 +1,6 @@
 package com.cognizant.logitrack.controller;
 
 import com.cognizant.logitrack.dto.ComplianceFlagDTO;
-import com.cognizant.logitrack.dto.ComplianceFlagRequestDTO;
 import com.cognizant.logitrack.service.ComplianceFlagService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,7 @@ public class ComplianceFlagController {
     }
 
     @PostMapping
-    public ResponseEntity<ComplianceFlagDTO> raise(@Valid @RequestBody ComplianceFlagRequestDTO dto) {
+    public ResponseEntity<ComplianceFlagDTO> raise(@Valid @RequestBody ComplianceFlagDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(flagService.raiseFlag(dto));
     }
 

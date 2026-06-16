@@ -3,17 +3,17 @@ package com.cognizant.logitrack.serviceImplementation;
 import com.cognizant.logitrack.service.ComplianceFlagService;
 import com.cognizant.logitrack.exception.ResourceNotFoundException;
 import com.cognizant.logitrack.dto.ComplianceFlagDTO;
-import com.cognizant.logitrack.dto.ComplianceFlagRequestDTO;
 import com.cognizant.logitrack.entity.ComplianceFlag;
 import com.cognizant.logitrack.enums.FlagStatus;
 import com.cognizant.logitrack.repository.ComplianceFlagRepository;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class ComplianceFlagServiceImpl implements ComplianceFlagService {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ComplianceFlagServiceImpl.class);
     private final ComplianceFlagRepository flagRepository;
 
     public ComplianceFlagServiceImpl(ComplianceFlagRepository flagRepository) {
@@ -21,7 +21,7 @@ public class ComplianceFlagServiceImpl implements ComplianceFlagService {
     }
 
     @Override
-    public ComplianceFlagDTO raiseFlag(ComplianceFlagRequestDTO dto) {
+    public ComplianceFlagDTO raiseFlag(ComplianceFlagDTO dto) {
         ComplianceFlag flag = ComplianceFlag.builder().shipmentId(dto.getShipmentId()).flagType(dto.getFlagType()).severity(dto.getSeverity()).status(FlagStatus.OPEN).build();
         ComplianceFlag saved = flagRepository.save(flag);
         log.info("Compliance flag raised: id={}, shipmentId={}", saved.getFlagId(), saved.getShipmentId());

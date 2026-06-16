@@ -1,7 +1,6 @@
 package com.cognizant.logitrack.controller;
 
 import com.cognizant.logitrack.dto.ShipmentDocumentDTO;
-import com.cognizant.logitrack.dto.ShipmentDocumentRequestDTO;
 import com.cognizant.logitrack.enums.DocumentStatus;
 import com.cognizant.logitrack.service.ShipmentDocumentService;
 import jakarta.validation.Valid;
@@ -23,7 +22,7 @@ public class ShipmentDocumentController {
     }
 
     @PostMapping
-    public ResponseEntity<ShipmentDocumentDTO> upload(@Valid @RequestBody ShipmentDocumentRequestDTO dto) {
+    public ResponseEntity<ShipmentDocumentDTO> upload(@Valid @RequestBody ShipmentDocumentDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(documentService.uploadDocument(dto));
     }
 

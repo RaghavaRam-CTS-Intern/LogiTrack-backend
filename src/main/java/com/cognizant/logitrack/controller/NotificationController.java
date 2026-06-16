@@ -1,7 +1,6 @@
 package com.cognizant.logitrack.controller;
 
 import com.cognizant.logitrack.dto.NotificationDTO;
-import com.cognizant.logitrack.dto.NotificationRequestDTO;
 import com.cognizant.logitrack.service.NotificationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -23,7 +22,7 @@ public class NotificationController {
     }
 
     @PostMapping
-    public ResponseEntity<NotificationDTO> send(@Valid @RequestBody NotificationRequestDTO dto) {
+    public ResponseEntity<NotificationDTO> send(@Valid @RequestBody NotificationDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(notificationService.sendNotification(dto));
     }
 

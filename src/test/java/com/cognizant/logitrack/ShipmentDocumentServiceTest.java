@@ -1,7 +1,6 @@
 package com.cognizant.logitrack;
 
 import com.cognizant.logitrack.dto.ShipmentDocumentDTO;
-import com.cognizant.logitrack.dto.ShipmentDocumentRequestDTO;
 import com.cognizant.logitrack.entity.ShipmentDocument;
 import com.cognizant.logitrack.enums.DocumentStatus;
 import com.cognizant.logitrack.enums.DocumentType;
@@ -38,8 +37,7 @@ class ShipmentDocumentServiceTest {
             return d;
         });
 
-        ShipmentDocumentRequestDTO dto = new ShipmentDocumentRequestDTO(1, DocumentType.BOL,
-                "/files/bol.pdf", LocalDate.now());
+        ShipmentDocumentDTO dto = ShipmentDocumentDTO.builder().shipmentId(1).documentType(DocumentType.BOL).filePath("/files/bol.pdf").submittedDate(LocalDate.now()).build();
         ShipmentDocumentDTO result = documentService.uploadDocument(dto);
 
         assertNotNull(result);

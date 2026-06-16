@@ -2,7 +2,6 @@ package com.cognizant.logitrack;
 
 import com.cognizant.logitrack.exception.BadRequestException;
 import com.cognizant.logitrack.dto.RateCardDTO;
-import com.cognizant.logitrack.dto.RateCardRequestDTO;
 import com.cognizant.logitrack.entity.Carrier;
 import com.cognizant.logitrack.entity.RateCard;
 import com.cognizant.logitrack.entity.Route;
@@ -41,9 +40,9 @@ class RateCardServiceTest {
     @InjectMocks
     private RateCardServiceImpl rateCardService;
 
-    private RateCardRequestDTO request() {
-        return new RateCardRequestDTO(1, 1, new BigDecimal("500.0"), "0-100kg",
-                LocalDate.now(), LocalDate.now().plusYears(1));
+    private RateCardDTO request() {
+        return RateCardDTO.builder().carrierId(1).routeId(1).baseRate(new BigDecimal("500.0")).weightSlab("0-100kg")
+                .effectiveDate(LocalDate.now()).expiryDate(LocalDate.now().plusYears(1)).build();
     }
 
     @Test

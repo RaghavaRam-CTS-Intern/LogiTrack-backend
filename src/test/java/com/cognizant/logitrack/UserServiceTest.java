@@ -34,6 +34,9 @@ class UserServiceTest {
     @Mock
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Mock
+    private com.cognizant.logitrack.service.AuditLogService auditLogService;
+
     @InjectMocks
     private UserServiceImpl userService;
 

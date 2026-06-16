@@ -4,19 +4,19 @@ import com.cognizant.logitrack.service.PurchaseOrderService;
 import com.cognizant.logitrack.exception.BadRequestException;
 import com.cognizant.logitrack.exception.ResourceNotFoundException;
 import com.cognizant.logitrack.dto.PurchaseOrderDTO;
-import com.cognizant.logitrack.dto.PurchaseOrderRequestDTO;
 import com.cognizant.logitrack.entity.PurchaseOrder;
 import com.cognizant.logitrack.entity.Supplier;
 import com.cognizant.logitrack.enums.POStatus;
 import com.cognizant.logitrack.repository.PurchaseOrderRepository;
 import com.cognizant.logitrack.repository.SupplierRepository;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class PurchaseOrderServiceImpl implements PurchaseOrderService {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(PurchaseOrderServiceImpl.class);
     private final PurchaseOrderRepository purchaseOrderRepository;
     private final SupplierRepository supplierRepository;
 
@@ -26,7 +26,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     }
 
     @Override
-    public PurchaseOrderDTO createPO(PurchaseOrderRequestDTO dto) {
+    public PurchaseOrderDTO createPO(PurchaseOrderDTO dto) {
         Supplier supplier = supplierRepository.findById(dto.getSupplierId()).orElseThrow(() -> new BadRequestException("Supplier not found: " + dto.getSupplierId()));
         PurchaseOrder po = PurchaseOrder.builder().supplier(supplier).warehouseId(dto.getWarehouseId()).lineItems(dto.getLineItems()).totalValue(dto.getTotalValue()).orderDate(dto.getOrderDate()).expectedDelivery(dto.getExpectedDelivery()).status(POStatus.DRAFT).build();
         PurchaseOrder saved = purchaseOrderRepository.save(po);

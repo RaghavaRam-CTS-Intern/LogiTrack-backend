@@ -3,17 +3,17 @@ package com.cognizant.logitrack.serviceImplementation;
 import com.cognizant.logitrack.service.InboundReceiptService;
 import com.cognizant.logitrack.exception.ResourceNotFoundException;
 import com.cognizant.logitrack.dto.InboundReceiptDTO;
-import com.cognizant.logitrack.dto.InboundReceiptRequestDTO;
 import com.cognizant.logitrack.entity.InboundReceipt;
 import com.cognizant.logitrack.enums.ReceiptStatus;
 import com.cognizant.logitrack.repository.InboundReceiptRepository;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class InboundReceiptServiceImpl implements InboundReceiptService {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(InboundReceiptServiceImpl.class);
     private final InboundReceiptRepository inboundReceiptRepository;
 
     public InboundReceiptServiceImpl(InboundReceiptRepository inboundReceiptRepository) {
@@ -21,7 +21,7 @@ public class InboundReceiptServiceImpl implements InboundReceiptService {
     }
 
     @Override
-    public InboundReceiptDTO createReceipt(InboundReceiptRequestDTO dto) {
+    public InboundReceiptDTO createReceipt(InboundReceiptDTO dto) {
         InboundReceipt receipt = InboundReceipt.builder().supplierOrderId(dto.getSupplierOrderId()).warehouseId(dto.getWarehouseId()).receivedDate(dto.getReceivedDate()).receivedBy(dto.getReceivedBy()).status(ReceiptStatus.PENDING).build();
         InboundReceipt saved = inboundReceiptRepository.save(receipt);
         log.info("Inbound receipt created: id={}", saved.getReceiptId());

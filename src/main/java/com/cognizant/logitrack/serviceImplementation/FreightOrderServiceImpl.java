@@ -4,19 +4,19 @@ import com.cognizant.logitrack.service.FreightOrderService;
 import com.cognizant.logitrack.exception.BadRequestException;
 import com.cognizant.logitrack.exception.ResourceNotFoundException;
 import com.cognizant.logitrack.dto.FreightOrderDTO;
-import com.cognizant.logitrack.dto.FreightOrderRequestDTO;
 import com.cognizant.logitrack.entity.FreightOrder;
 import com.cognizant.logitrack.enums.FreightOrderStatus;
 import com.cognizant.logitrack.repository.FreightOrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@Slf4j
 public class FreightOrderServiceImpl implements FreightOrderService {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(FreightOrderServiceImpl.class);
     private final FreightOrderRepository freightOrderRepository;
 
     public FreightOrderServiceImpl(FreightOrderRepository freightOrderRepository) {
@@ -24,7 +24,7 @@ public class FreightOrderServiceImpl implements FreightOrderService {
     }
 
     @Override
-    public FreightOrderDTO createFreightOrder(FreightOrderRequestDTO dto) {
+    public FreightOrderDTO createFreightOrder(FreightOrderDTO dto) {
         FreightOrder order = FreightOrder.builder().shipperId(dto.getShipperId()).originLocationId(dto.getOriginLocationId()).destinationLocationId(dto.getDestinationLocationId()).cargoDescription(dto.getCargoDescription()).weight(dto.getWeight()).volume(dto.getVolume()).requiredDeliveryDate(dto.getRequiredDeliveryDate()).status(FreightOrderStatus.DRAFT).build();
         FreightOrder saved = freightOrderRepository.save(order);
         log.info("Freight order created: id={}", saved.getFreightOrderId());
