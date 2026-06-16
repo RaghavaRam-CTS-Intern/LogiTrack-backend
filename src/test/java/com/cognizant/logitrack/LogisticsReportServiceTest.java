@@ -6,6 +6,7 @@ import com.cognizant.logitrack.dto.ReportRequestDTO;
 import com.cognizant.logitrack.entity.LogisticsReport;
 import com.cognizant.logitrack.repository.LogisticsReportRepository;
 import com.cognizant.logitrack.service.LogisticsReportService;
+import com.cognizant.logitrack.serviceImplementation.LogisticsReportServiceImpl;
 import com.cognizant.logitrack.repository.AuditLogRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +32,7 @@ class LogisticsReportServiceTest {
     private AuditLogRepository auditLogRepository;
 
     @InjectMocks
-    private LogisticsReportService reportService;
+    private LogisticsReportServiceImpl reportService;
 
     @Test
     void generateReport_returnsReportWithMetrics() {

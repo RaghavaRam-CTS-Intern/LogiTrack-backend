@@ -7,6 +7,7 @@ import com.cognizant.logitrack.enums.RouteMode;
 import com.cognizant.logitrack.enums.RouteStatus;
 import com.cognizant.logitrack.repository.RouteRepository;
 import com.cognizant.logitrack.service.RouteService;
+import com.cognizant.logitrack.serviceImplementation.RouteServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,7 +28,7 @@ class RouteServiceTest {
     private RouteRepository routeRepository;
 
     @InjectMocks
-    private RouteService routeService;
+    private RouteServiceImpl routeService;
 
     @Test
     void addRoute_valid_returnsDTO() {

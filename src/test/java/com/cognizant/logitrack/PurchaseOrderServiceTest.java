@@ -9,6 +9,7 @@ import com.cognizant.logitrack.enums.POStatus;
 import com.cognizant.logitrack.repository.PurchaseOrderRepository;
 import com.cognizant.logitrack.repository.SupplierRepository;
 import com.cognizant.logitrack.service.PurchaseOrderService;
+import com.cognizant.logitrack.serviceImplementation.PurchaseOrderServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,7 +34,7 @@ class PurchaseOrderServiceTest {
     private SupplierRepository supplierRepository;
 
     @InjectMocks
-    private PurchaseOrderService purchaseOrderService;
+    private PurchaseOrderServiceImpl purchaseOrderService;
 
     private PurchaseOrderRequestDTO request() {
         return new PurchaseOrderRequestDTO(1, 1, "[]", new BigDecimal("1000.0"),

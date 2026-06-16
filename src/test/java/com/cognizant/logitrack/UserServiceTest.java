@@ -9,6 +9,7 @@ import com.cognizant.logitrack.enums.Role;
 import com.cognizant.logitrack.enums.UserStatus;
 import com.cognizant.logitrack.repository.UserRepository;
 import com.cognizant.logitrack.service.UserService;
+import com.cognizant.logitrack.serviceImplementation.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +35,7 @@ class UserServiceTest {
     private BCryptPasswordEncoder passwordEncoder;
 
     @InjectMocks
-    private UserService userService;
+    private UserServiceImpl userService;
 
     private RegisterRequestDTO registerRequest;
 

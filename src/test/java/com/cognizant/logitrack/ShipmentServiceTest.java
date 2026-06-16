@@ -13,6 +13,7 @@ import com.cognizant.logitrack.repository.DeliveryEventRepository;
 import com.cognizant.logitrack.repository.FreightOrderRepository;
 import com.cognizant.logitrack.repository.ShipmentRepository;
 import com.cognizant.logitrack.service.ShipmentService;
+import com.cognizant.logitrack.serviceImplementation.ShipmentServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,7 +40,7 @@ class ShipmentServiceTest {
     private DeliveryEventRepository deliveryEventRepository;
 
     @InjectMocks
-    private ShipmentService shipmentService;
+    private ShipmentServiceImpl shipmentService;
 
     @Test
     void createShipment_validOrder_savedWithDispatchedStatus() {

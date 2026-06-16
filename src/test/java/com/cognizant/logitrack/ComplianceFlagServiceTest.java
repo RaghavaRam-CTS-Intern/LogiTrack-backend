@@ -7,6 +7,7 @@ import com.cognizant.logitrack.enums.FlagSeverity;
 import com.cognizant.logitrack.enums.FlagStatus;
 import com.cognizant.logitrack.repository.ComplianceFlagRepository;
 import com.cognizant.logitrack.service.ComplianceFlagService;
+import com.cognizant.logitrack.serviceImplementation.ComplianceFlagServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,7 +27,7 @@ class ComplianceFlagServiceTest {
     private ComplianceFlagRepository flagRepository;
 
     @InjectMocks
-    private ComplianceFlagService flagService;
+    private ComplianceFlagServiceImpl flagService;
 
     @Test
     void raiseFlag_savedAsOpen() {

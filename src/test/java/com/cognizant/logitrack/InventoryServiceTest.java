@@ -4,6 +4,7 @@ import com.cognizant.logitrack.dto.InventoryDTO;
 import com.cognizant.logitrack.entity.WarehouseInventory;
 import com.cognizant.logitrack.repository.WarehouseInventoryRepository;
 import com.cognizant.logitrack.service.InventoryService;
+import com.cognizant.logitrack.serviceImplementation.InventoryServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,7 +25,7 @@ class InventoryServiceTest {
     private WarehouseInventoryRepository inventoryRepository;
 
     @InjectMocks
-    private InventoryService inventoryService;
+    private InventoryServiceImpl inventoryService;
 
     @Test
     void getInventory_byWarehouse_returnsList() {

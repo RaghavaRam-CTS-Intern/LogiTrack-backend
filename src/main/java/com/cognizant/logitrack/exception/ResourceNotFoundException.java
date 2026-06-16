@@ -1,3 +1,4 @@
+
 package com.cognizant.logitrack.exception;
 
 public class ResourceNotFoundException extends RuntimeException {

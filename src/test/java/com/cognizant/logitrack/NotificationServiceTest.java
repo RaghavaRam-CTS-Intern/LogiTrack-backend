@@ -7,6 +7,7 @@ import com.cognizant.logitrack.enums.NotificationCategory;
 import com.cognizant.logitrack.enums.NotificationStatus;
 import com.cognizant.logitrack.repository.NotificationRepository;
 import com.cognizant.logitrack.service.NotificationService;
+import com.cognizant.logitrack.serviceImplementation.NotificationServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,7 +28,7 @@ class NotificationServiceTest {
     private NotificationRepository notificationRepository;
 
     @InjectMocks
-    private NotificationService notificationService;
+    private NotificationServiceImpl notificationService;
 
     @Test
     void sendNotification_savedAsUnread() {

@@ -7,6 +7,7 @@ import com.cognizant.logitrack.enums.DocumentStatus;
 import com.cognizant.logitrack.enums.DocumentType;
 import com.cognizant.logitrack.repository.ShipmentDocumentRepository;
 import com.cognizant.logitrack.service.ShipmentDocumentService;
+import com.cognizant.logitrack.serviceImplementation.ShipmentDocumentServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,7 +28,7 @@ class ShipmentDocumentServiceTest {
     private ShipmentDocumentRepository documentRepository;
 
     @InjectMocks
-    private ShipmentDocumentService documentService;
+    private ShipmentDocumentServiceImpl documentService;
 
     @Test
     void uploadDocument_savedAsPending() {

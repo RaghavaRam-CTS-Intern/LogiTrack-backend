@@ -7,6 +7,7 @@ import com.cognizant.logitrack.entity.FreightOrder;
 import com.cognizant.logitrack.enums.FreightOrderStatus;
 import com.cognizant.logitrack.repository.FreightOrderRepository;
 import com.cognizant.logitrack.service.FreightOrderService;
+import com.cognizant.logitrack.serviceImplementation.FreightOrderServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,7 +29,7 @@ class FreightOrderServiceTest {
     private FreightOrderRepository freightOrderRepository;
 
     @InjectMocks
-    private FreightOrderService freightOrderService;
+    private FreightOrderServiceImpl freightOrderService;
 
     private FreightOrderRequestDTO request() {
         return new FreightOrderRequestDTO(1, 10, 20, "Electronics",

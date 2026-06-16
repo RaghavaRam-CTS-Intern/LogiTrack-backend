@@ -9,6 +9,7 @@ import com.cognizant.logitrack.enums.CarrierStatus;
 import com.cognizant.logitrack.enums.RouteMode;
 import com.cognizant.logitrack.repository.CarrierRepository;
 import com.cognizant.logitrack.service.CarrierService;
+import com.cognizant.logitrack.serviceImplementation.CarrierServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,7 +29,7 @@ class CarrierServiceTest {
     private CarrierRepository carrierRepository;
 
     @InjectMocks
-    private CarrierService carrierService;
+    private CarrierServiceImpl carrierService;
 
     @Test
     void addCarrier_valid_returnsDTO() {

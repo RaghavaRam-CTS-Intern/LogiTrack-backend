@@ -10,6 +10,7 @@ import com.cognizant.logitrack.repository.CarrierRepository;
 import com.cognizant.logitrack.repository.RateCardRepository;
 import com.cognizant.logitrack.repository.RouteRepository;
 import com.cognizant.logitrack.service.RateCardService;
+import com.cognizant.logitrack.serviceImplementation.RateCardServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,7 +39,7 @@ class RateCardServiceTest {
     private RouteRepository routeRepository;
 
     @InjectMocks
-    private RateCardService rateCardService;
+    private RateCardServiceImpl rateCardService;
 
     private RateCardRequestDTO request() {
         return new RateCardRequestDTO(1, 1, new BigDecimal("500.0"), "0-100kg",

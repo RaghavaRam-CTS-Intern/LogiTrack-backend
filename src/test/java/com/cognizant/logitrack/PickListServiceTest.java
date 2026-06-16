@@ -6,6 +6,7 @@ import com.cognizant.logitrack.entity.PickList;
 import com.cognizant.logitrack.enums.PickListStatus;
 import com.cognizant.logitrack.repository.PickListRepository;
 import com.cognizant.logitrack.service.PickListService;
+import com.cognizant.logitrack.serviceImplementation.PickListServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,7 +26,7 @@ class PickListServiceTest {
     private PickListRepository pickListRepository;
 
     @InjectMocks
-    private PickListService pickListService;
+    private PickListServiceImpl pickListService;
 
     @Test
     void createPickList_valid_savedWithOpenStatus() {

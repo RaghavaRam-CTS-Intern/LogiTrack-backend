@@ -7,6 +7,7 @@ import com.cognizant.logitrack.entity.Supplier;
 import com.cognizant.logitrack.enums.SupplierStatus;
 import com.cognizant.logitrack.repository.SupplierRepository;
 import com.cognizant.logitrack.service.SupplierService;
+import com.cognizant.logitrack.serviceImplementation.SupplierServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,7 +27,7 @@ class SupplierServiceTest {
     private SupplierRepository supplierRepository;
 
     @InjectMocks
-    private SupplierService supplierService;
+    private SupplierServiceImpl supplierService;
 
     @Test
     void addSupplier_valid_returnsDTO() {
