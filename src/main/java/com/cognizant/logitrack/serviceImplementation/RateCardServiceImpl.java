@@ -55,6 +55,11 @@ public class RateCardServiceImpl implements RateCardService {
     }
 
     @Override
+    public List<RateCardDTO> getAllRateCards() {
+        return rateCardRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    @Override
     public RateCardDTO updateStatus(Integer id, RateCardStatus status) {
         RateCard rateCard = findEntity(id);
         rateCard.setStatus(status);

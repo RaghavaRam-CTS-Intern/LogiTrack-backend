@@ -35,7 +35,7 @@ public class RateCardController {
         if (routeId != null) {
             return ResponseEntity.ok(rateCardService.getRateCardsByRoute(routeId));
         }
-        return ResponseEntity.ok(List.of());
+        return ResponseEntity.ok(rateCardService.getAllRateCards());
     }
 
     @GetMapping("/{id}")

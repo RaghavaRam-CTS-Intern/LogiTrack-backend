@@ -8,6 +8,7 @@ public interface RateCardService {
     RateCardDTO addRateCard(RateCardDTO dto);
     List<RateCardDTO> getRateCardsByCarrier(Integer carrierId);
     List<RateCardDTO> getRateCardsByRoute(Integer routeId);
+    List<RateCardDTO> getAllRateCards();
     RateCardDTO getById(Integer id);
     RateCardDTO updateStatus(Integer id, RateCardStatus status);
 }
