@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< HEAD
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-=======
-<<<<<<< HEAD
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-=======
 <project xmlns="https://maven.apache.org/POM/4.0.0"
          xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
->>>>>>> 018f19a8d514cea87f525bd0954bf93974224a30
->>>>>>> 5fba260b34991317ab0f599723ab767946a2a4e3
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -65,20 +53,12 @@
         </dependency>
 
         <!-- Lombok -->
-<<<<<<< HEAD
 		<dependency>
 		    <groupId>org.projectlombok</groupId>
 		    <artifactId>lombok</artifactId>
 		    <version>${lombok.version}</version>
 		    <scope>provided</scope>
 		</dependency>
-=======
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
->>>>>>> 5fba260b34991317ab0f599723ab767946a2a4e3
 
         <!-- JWT -->
         <dependency>
@@ -115,11 +95,8 @@
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
-<<<<<<< HEAD
         
 
-=======
->>>>>>> 5fba260b34991317ab0f599723ab767946a2a4e3
     </dependencies>
 
     <build>
