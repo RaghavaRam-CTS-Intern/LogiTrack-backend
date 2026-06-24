@@ -21,7 +21,25 @@ import com.cognizant.logitrack.entity.Supplier;
 import com.cognizant.logitrack.enums.SupplierStatus;
 import com.cognizant.logitrack.repository.SupplierRepository;
 import com.cognizant.logitrack.entity.WarehouseInventory;
+import com.cognizant.logitrack.entity.FreightOrder;
+import com.cognizant.logitrack.entity.Shipment;
+import com.cognizant.logitrack.entity.ShipmentDocument;
+import com.cognizant.logitrack.entity.DeliveryEvent;
+import com.cognizant.logitrack.entity.InboundReceipt;
+import com.cognizant.logitrack.entity.LogisticsReport;
+import com.cognizant.logitrack.entity.PickList;
+import com.cognizant.logitrack.entity.PurchaseOrder;
+import com.cognizant.logitrack.entity.ComplianceFlag;
 import com.cognizant.logitrack.repository.WarehouseInventoryRepository;
+import com.cognizant.logitrack.repository.FreightOrderRepository;
+import com.cognizant.logitrack.repository.ShipmentRepository;
+import com.cognizant.logitrack.repository.ShipmentDocumentRepository;
+import com.cognizant.logitrack.repository.DeliveryEventRepository;
+import com.cognizant.logitrack.repository.InboundReceiptRepository;
+import com.cognizant.logitrack.repository.LogisticsReportRepository;
+import com.cognizant.logitrack.repository.PickListRepository;
+import com.cognizant.logitrack.repository.PurchaseOrderRepository;
+import com.cognizant.logitrack.repository.ComplianceFlagRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -41,10 +59,19 @@ public class DataSeeder implements CommandLineRunner {
     private final RateCardRepository rateCardRepository;
     private final SupplierRepository supplierRepository;
     private final WarehouseInventoryRepository inventoryRepository;
+    private final FreightOrderRepository freightOrderRepository;
+    private final ShipmentRepository shipmentRepository;
+    private final ShipmentDocumentRepository shipmentDocumentRepository;
+    private final DeliveryEventRepository deliveryEventRepository;
+    private final InboundReceiptRepository inboundReceiptRepository;
+    private final LogisticsReportRepository logisticsReportRepository;
+    private final PickListRepository pickListRepository;
+    private final PurchaseOrderRepository purchaseOrderRepository;
+    private final ComplianceFlagRepository complianceFlagRepository;
     private final NotificationRepository notificationRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public DataSeeder(UserRepository userRepository, AuditLogRepository auditLogRepository, CarrierRepository carrierRepository, RouteRepository routeRepository, RateCardRepository rateCardRepository, SupplierRepository supplierRepository, WarehouseInventoryRepository inventoryRepository, NotificationRepository notificationRepository, BCryptPasswordEncoder passwordEncoder) {
+    public DataSeeder(UserRepository userRepository, AuditLogRepository auditLogRepository, CarrierRepository carrierRepository, RouteRepository routeRepository, RateCardRepository rateCardRepository, SupplierRepository supplierRepository, WarehouseInventoryRepository inventoryRepository, NotificationRepository notificationRepository, FreightOrderRepository freightOrderRepository, ShipmentRepository shipmentRepository, ShipmentDocumentRepository shipmentDocumentRepository, DeliveryEventRepository deliveryEventRepository, InboundReceiptRepository inboundReceiptRepository, LogisticsReportRepository logisticsReportRepository, PickListRepository pickListRepository, PurchaseOrderRepository purchaseOrderRepository, ComplianceFlagRepository complianceFlagRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.auditLogRepository = auditLogRepository;
         this.carrierRepository = carrierRepository;
@@ -53,6 +80,15 @@ public class DataSeeder implements CommandLineRunner {
         this.supplierRepository = supplierRepository;
         this.inventoryRepository = inventoryRepository;
         this.notificationRepository = notificationRepository;
+        this.freightOrderRepository = freightOrderRepository;
+        this.shipmentRepository = shipmentRepository;
+        this.shipmentDocumentRepository = shipmentDocumentRepository;
+        this.deliveryEventRepository = deliveryEventRepository;
+        this.inboundReceiptRepository = inboundReceiptRepository;
+        this.logisticsReportRepository = logisticsReportRepository;
+        this.pickListRepository = pickListRepository;
+        this.purchaseOrderRepository = purchaseOrderRepository;
+        this.complianceFlagRepository = complianceFlagRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -66,7 +102,135 @@ public class DataSeeder implements CommandLineRunner {
         seedSuppliers();
         seedInventory();
         seedNotifications();
+        seedFreightOrders();
+        seedShipments();
+        seedShipmentDocuments();
+        seedDeliveryEvents();
+        seedPurchaseOrders();
+        seedInboundReceipts();
+        seedPickLists();
+        seedComplianceFlags();
+        seedLogisticsReports();
         log.info("Data seeding complete.");
+    }
+
+    private void seedFreightOrders() {
+        if (freightOrderRepository.count() != 0) {
+            return;
+        }
+        List<FreightOrder> orders = new ArrayList<>();
+        orders.add(FreightOrder.builder().shipperId(1).originLocationId(1).destinationLocationId(2).cargoDescription("Electronics").weight(new BigDecimal("120.5")).volume(new BigDecimal("1.2")).requiredDeliveryDate(LocalDate.now().plusDays(5)).status(com.cognizant.logitrack.enums.FreightOrderStatus.BOOKED).build());
+        orders.add(FreightOrder.builder().shipperId(2).originLocationId(2).destinationLocationId(3).cargoDescription("FMCG Items").weight(new BigDecimal("80")).volume(new BigDecimal("0.8")).requiredDeliveryDate(LocalDate.now().plusDays(3)).status(com.cognizant.logitrack.enums.FreightOrderStatus.BOOKED).build());
+        orders.add(FreightOrder.builder().shipperId(3).originLocationId(1).destinationLocationId(4).cargoDescription("Automotive parts").weight(new BigDecimal("450")).volume(new BigDecimal("4.5")).requiredDeliveryDate(LocalDate.now().plusDays(10)).status(com.cognizant.logitrack.enums.FreightOrderStatus.DRAFT).build());
+        orders.add(FreightOrder.builder().shipperId(1).originLocationId(3).destinationLocationId(4).cargoDescription("Textiles").weight(new BigDecimal("200")).volume(new BigDecimal("2.5")).requiredDeliveryDate(LocalDate.now().plusDays(7)).status(com.cognizant.logitrack.enums.FreightOrderStatus.BOOKED).build());
+        freightOrderRepository.saveAll(orders);
+        log.info("Seeded {} freight orders", orders.size());
+    }
+
+    private void seedShipments() {
+        if (shipmentRepository.count() != 0) {
+            return;
+        }
+        List<FreightOrder> orders = freightOrderRepository.findAll();
+        List<Carrier> carriers = carrierRepository.findAll();
+        if (orders.isEmpty() || carriers.isEmpty()) return;
+        List<Shipment> shipments = new ArrayList<>();
+        int idx = 0;
+        for (FreightOrder fo : orders) {
+            Carrier c = carriers.get(idx % carriers.size());
+            shipments.add(Shipment.builder().freightOrder(fo).carrierId(c.getCarrierId()).vehicleId(100 + idx).driverId(200 + idx).dispatchDate(LocalDate.now()).estimatedArrival(LocalDate.now().plusDays(3)).status(com.cognizant.logitrack.enums.ShipmentStatus.DISPATCHED).build());
+            idx++;
+        }
+        shipmentRepository.saveAll(shipments);
+        log.info("Seeded {} shipments", shipments.size());
+    }
+
+    private void seedShipmentDocuments() {
+        if (shipmentDocumentRepository.count() != 0) return;
+        List<Shipment> shipments = shipmentRepository.findAll();
+        if (shipments.isEmpty()) return;
+        List<ShipmentDocument> docs = new ArrayList<>();
+        for (int i = 0; i < Math.min(5, shipments.size()); i++) {
+            Shipment s = shipments.get(i);
+            docs.add(ShipmentDocument.builder().shipmentId(s.getShipmentId()).documentType(com.cognizant.logitrack.enums.DocumentType.BOL).filePath("/docs/bol_" + s.getShipmentId() + ".pdf").submittedDate(LocalDate.now()).status(com.cognizant.logitrack.enums.DocumentStatus.SUBMITTED).build());
+            docs.add(ShipmentDocument.builder().shipmentId(s.getShipmentId()).documentType(com.cognizant.logitrack.enums.DocumentType.PACKINGLIST).filePath("/docs/packing_" + s.getShipmentId() + ".pdf").submittedDate(LocalDate.now()).status(com.cognizant.logitrack.enums.DocumentStatus.PENDING).build());
+        }
+        shipmentDocumentRepository.saveAll(docs);
+        log.info("Seeded {} shipment documents", docs.size());
+    }
+
+    private void seedDeliveryEvents() {
+        if (deliveryEventRepository.count() != 0) return;
+        List<Shipment> shipments = shipmentRepository.findAll();
+        if (shipments.isEmpty()) return;
+        List<DeliveryEvent> events = new ArrayList<>();
+        for (Shipment s : shipments) {
+            events.add(DeliveryEvent.builder().shipment(s).eventType(com.cognizant.logitrack.enums.EventType.PICKUP).locationId(1).notes("Picked up from origin").build());
+            events.add(DeliveryEvent.builder().shipment(s).eventType(com.cognizant.logitrack.enums.EventType.INTRANSIT).locationId(2).notes("In transit").build());
+        }
+        deliveryEventRepository.saveAll(events);
+        log.info("Seeded {} delivery events", events.size());
+    }
+
+    private void seedPurchaseOrders() {
+        if (purchaseOrderRepository.count() != 0) return;
+        List<Supplier> suppliers = supplierRepository.findAll();
+        if (suppliers.isEmpty()) return;
+        List<PurchaseOrder> pos = new ArrayList<>();
+        for (int i = 0; i < suppliers.size(); i++) {
+            Supplier s = suppliers.get(i);
+            pos.add(PurchaseOrder.builder().supplier(s).warehouseId((i % 2) + 1).lineItems("[{\"sku\":\"SKU-0001\",\"qty\":100}]").totalValue(new BigDecimal("10000.00")).orderDate(LocalDate.now()).expectedDelivery(LocalDate.now().plusDays(7)).status(com.cognizant.logitrack.enums.POStatus.PLACED).build());
+        }
+        purchaseOrderRepository.saveAll(pos);
+        log.info("Seeded {} purchase orders", pos.size());
+    }
+
+    private void seedInboundReceipts() {
+        if (inboundReceiptRepository.count() != 0) return;
+        List<PurchaseOrder> pos = purchaseOrderRepository.findAll();
+        if (pos.isEmpty()) return;
+        List<InboundReceipt> receipts = new ArrayList<>();
+        for (int i = 0; i < pos.size(); i++) {
+            PurchaseOrder po = pos.get(i);
+            receipts.add(InboundReceipt.builder().supplierOrderId(po.getPoId()).warehouseId(po.getWarehouseId()).receivedDate(LocalDate.now()).receivedBy(1).status(com.cognizant.logitrack.enums.ReceiptStatus.RECEIVED).build());
+        }
+        inboundReceiptRepository.saveAll(receipts);
+        log.info("Seeded {} inbound receipts", receipts.size());
+    }
+
+    private void seedPickLists() {
+        if (pickListRepository.count() != 0) return;
+        List<FreightOrder> orders = freightOrderRepository.findAll();
+        if (orders.isEmpty()) return;
+        List<PickList> lists = new ArrayList<>();
+        for (int i = 0; i < orders.size(); i++) {
+            FreightOrder fo = orders.get(i);
+            lists.add(PickList.builder().freightOrderId(fo.getFreightOrderId()).warehouseId((i % 2) + 1).assignedTo(300 + i).status(com.cognizant.logitrack.enums.PickListStatus.OPEN).build());
+        }
+        pickListRepository.saveAll(lists);
+        log.info("Seeded {} pick lists", lists.size());
+    }
+
+    private void seedComplianceFlags() {
+        if (complianceFlagRepository.count() != 0) return;
+        List<Shipment> shipments = shipmentRepository.findAll();
+        if (shipments.isEmpty()) return;
+        List<ComplianceFlag> flags = new ArrayList<>();
+        for (int i = 0; i < Math.min(3, shipments.size()); i++) {
+            Shipment s = shipments.get(i);
+            flags.add(ComplianceFlag.builder().shipmentId(s.getShipmentId()).flagType("DOCUMENT_MISSING").severity(com.cognizant.logitrack.enums.FlagSeverity.MEDIUM).status(com.cognizant.logitrack.enums.FlagStatus.OPEN).build());
+        }
+        complianceFlagRepository.saveAll(flags);
+        log.info("Seeded {} compliance flags", flags.size());
+    }
+
+    private void seedLogisticsReports() {
+        if (logisticsReportRepository.count() != 0) return;
+        List<LogisticsReport> reports = new ArrayList<>();
+        reports.add(LogisticsReport.builder().scope("DAILY").metrics("{\"onTime\":95,\"delayed\":5}").build());
+        reports.add(LogisticsReport.builder().scope("WEEKLY").metrics("{\"onTime\":93,\"delayed\":7}").build());
+        logisticsReportRepository.saveAll(reports);
+        log.info("Seeded {} logistics reports", reports.size());
     }
 
     private void seedUsers() {
