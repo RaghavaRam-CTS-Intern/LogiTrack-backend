@@ -7,16 +7,34 @@ import com.cognizant.logitrack.enums.UserStatus;
 import com.cognizant.logitrack.repository.AuditLogRepository;
 import com.cognizant.logitrack.repository.UserRepository;
 import com.cognizant.logitrack.entity.Notification;
+import com.cognizant.logitrack.entity.PickList;
+import com.cognizant.logitrack.entity.PurchaseOrder;
 import com.cognizant.logitrack.enums.NotificationCategory;
 import com.cognizant.logitrack.enums.NotificationStatus;
 import com.cognizant.logitrack.repository.NotificationRepository;
+import com.cognizant.logitrack.repository.PickListRepository;
+import com.cognizant.logitrack.repository.PurchaseOrderRepository;
 import com.cognizant.logitrack.entity.Carrier;
+import com.cognizant.logitrack.entity.ComplianceFlag;
+import com.cognizant.logitrack.entity.DeliveryEvent;
+import com.cognizant.logitrack.entity.FreightOrder;
+import com.cognizant.logitrack.entity.InboundReceipt;
+import com.cognizant.logitrack.entity.LogisticsReport;
 import com.cognizant.logitrack.entity.RateCard;
 import com.cognizant.logitrack.entity.Route;
+import com.cognizant.logitrack.entity.Shipment;
+import com.cognizant.logitrack.entity.ShipmentDocument;
 import com.cognizant.logitrack.enums.*;
 import com.cognizant.logitrack.repository.CarrierRepository;
+import com.cognizant.logitrack.repository.ComplianceFlagRepository;
+import com.cognizant.logitrack.repository.DeliveryEventRepository;
+import com.cognizant.logitrack.repository.FreightOrderRepository;
+import com.cognizant.logitrack.repository.InboundReceiptRepository;
+import com.cognizant.logitrack.repository.LogisticsReportRepository;
 import com.cognizant.logitrack.repository.RateCardRepository;
 import com.cognizant.logitrack.repository.RouteRepository;
+import com.cognizant.logitrack.repository.ShipmentDocumentRepository;
+import com.cognizant.logitrack.repository.ShipmentRepository;
 import com.cognizant.logitrack.entity.Supplier;
 import com.cognizant.logitrack.enums.SupplierStatus;
 import com.cognizant.logitrack.repository.SupplierRepository;
@@ -43,20 +61,50 @@ public class DataSeeder implements CommandLineRunner {
     private final WarehouseInventoryRepository inventoryRepository;
     private final NotificationRepository notificationRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    
+    private final FreightOrderRepository freightOrderRepository;
+    private final ShipmentRepository shipmentRepository;
+    private final DeliveryEventRepository deliveryEventRepository;
+    private final PurchaseOrderRepository purchaseOrderRepository;
+    private final InboundReceiptRepository inboundReceiptRepository;
+    private final PickListRepository pickListRepository;
+    private final ShipmentDocumentRepository shipmentDocumentRepository;
+    private final ComplianceFlagRepository complianceFlagRepository;
+    private final LogisticsReportRepository logisticsReportRepository;
 
-    public DataSeeder(UserRepository userRepository, AuditLogRepository auditLogRepository, CarrierRepository carrierRepository, RouteRepository routeRepository, RateCardRepository rateCardRepository, SupplierRepository supplierRepository, WarehouseInventoryRepository inventoryRepository, NotificationRepository notificationRepository, BCryptPasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.auditLogRepository = auditLogRepository;
-        this.carrierRepository = carrierRepository;
-        this.routeRepository = routeRepository;
-        this.rateCardRepository = rateCardRepository;
-        this.supplierRepository = supplierRepository;
-        this.inventoryRepository = inventoryRepository;
-        this.notificationRepository = notificationRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    
 
-    @Override
+    public DataSeeder(UserRepository userRepository, AuditLogRepository auditLogRepository,
+			CarrierRepository carrierRepository, RouteRepository routeRepository, RateCardRepository rateCardRepository,
+			SupplierRepository supplierRepository, WarehouseInventoryRepository inventoryRepository,
+			NotificationRepository notificationRepository, BCryptPasswordEncoder passwordEncoder,
+			FreightOrderRepository freightOrderRepository, ShipmentRepository shipmentRepository,
+			DeliveryEventRepository deliveryEventRepository, PurchaseOrderRepository purchaseOrderRepository,
+			InboundReceiptRepository inboundReceiptRepository, PickListRepository pickListRepository,
+			ShipmentDocumentRepository shipmentDocumentRepository, ComplianceFlagRepository complianceFlagRepository,
+			LogisticsReportRepository logisticsReportRepository) {
+		super();
+		this.userRepository = userRepository;
+		this.auditLogRepository = auditLogRepository;
+		this.carrierRepository = carrierRepository;
+		this.routeRepository = routeRepository;
+		this.rateCardRepository = rateCardRepository;
+		this.supplierRepository = supplierRepository;
+		this.inventoryRepository = inventoryRepository;
+		this.notificationRepository = notificationRepository;
+		this.passwordEncoder = passwordEncoder;
+		this.freightOrderRepository = freightOrderRepository;
+		this.shipmentRepository = shipmentRepository;
+		this.deliveryEventRepository = deliveryEventRepository;
+		this.purchaseOrderRepository = purchaseOrderRepository;
+		this.inboundReceiptRepository = inboundReceiptRepository;
+		this.pickListRepository = pickListRepository;
+		this.shipmentDocumentRepository = shipmentDocumentRepository;
+		this.complianceFlagRepository = complianceFlagRepository;
+		this.logisticsReportRepository = logisticsReportRepository;
+	}
+
+	@Override
     public void run(String... args) {
         seedUsers();
         seedAuditLogs();
@@ -66,6 +114,15 @@ public class DataSeeder implements CommandLineRunner {
         seedSuppliers();
         seedInventory();
         seedNotifications();
+        seedFreightOrders();
+        seedShipments();
+        seedDeliveryEvents();
+        seedPurchaseOrders();
+        seedInboundReceipts();
+        seedPickLists();
+        seedShipmentDocuments();
+        seedComplianceFlags();
+        seedLogisticsReports();
         log.info("Data seeding complete.");
     }
 
@@ -174,4 +231,305 @@ public class DataSeeder implements CommandLineRunner {
         notificationRepository.save(Notification.builder().userId(5).message("Compliance document pending review").category(NotificationCategory.COMPLIANCE).status(NotificationStatus.UNREAD).build());
         log.info("Seeded 5 notifications");
     }
+    
+    
+    // New Seedings
+    private void seedFreightOrders() {
+        if (freightOrderRepository.count() != 0) {
+            return;
+        }
+
+        User shipper = userRepository.findAll()
+                .stream()
+                .filter(u -> u.getRole() == Role.SHIPPER)
+                .findFirst()
+                .orElse(null);
+
+        if (shipper == null) {
+            return;
+        }
+
+        freightOrderRepository.save(
+                FreightOrder.builder()
+                        .shipperId(shipper.getUserId())
+                        .originLocationId(1)
+                        .destinationLocationId(2)
+                        .cargoDescription("Electronic Components")
+                        .weight(new BigDecimal("250.50"))
+                        .volume(new BigDecimal("12.00"))
+                        .requiredDeliveryDate(LocalDate.now().plusDays(5))
+                        .status(FreightOrderStatus.BOOKED)
+                        .build());
+
+        freightOrderRepository.save(
+                FreightOrder.builder()
+                        .shipperId(shipper.getUserId())
+                        .originLocationId(2)
+                        .destinationLocationId(4)
+                        .cargoDescription("Automotive Parts")
+                        .weight(new BigDecimal("500.00"))
+                        .volume(new BigDecimal("25.50"))
+                        .requiredDeliveryDate(LocalDate.now().plusDays(8))
+                        .status(FreightOrderStatus.INTRANSIT)
+                        .build());
+    }
+    
+    private void seedShipments() {
+
+        if (shipmentRepository.count() != 0) {
+            return;
+        }
+
+        List<FreightOrder> orders = freightOrderRepository.findAll();
+        List<Carrier> carriers = carrierRepository.findAll();
+
+        User driver = userRepository.findAll()
+                .stream()
+                .filter(u -> u.getRole() == Role.DRIVER)
+                .findFirst()
+                .orElse(null);
+
+        if (orders.isEmpty() || carriers.isEmpty() || driver == null) {
+            return;
+        }
+
+        shipmentRepository.save(
+                Shipment.builder()
+                        .freightOrder(orders.get(0))
+                        .carrierId(carriers.get(0).getCarrierId())
+                        .vehicleId(101)
+                        .driverId(driver.getUserId())
+                        .dispatchDate(LocalDate.now().minusDays(1))
+                        .estimatedArrival(LocalDate.now().plusDays(2))
+                        .status(ShipmentStatus.INTRANSIT)
+                        .build());
+
+        shipmentRepository.save(
+                Shipment.builder()
+                        .freightOrder(orders.get(1))
+                        .carrierId(carriers.get(1).getCarrierId())
+                        .vehicleId(102)
+                        .driverId(driver.getUserId())
+                        .dispatchDate(LocalDate.now())
+                        .estimatedArrival(LocalDate.now().plusDays(3))
+                        .status(ShipmentStatus.DISPATCHED)
+                        .build());
+    }
+    
+    
+    private void seedDeliveryEvents() {
+
+        if (deliveryEventRepository.count() != 0) {
+            return;
+        }
+
+        List<Shipment> shipments = shipmentRepository.findAll();
+
+        if (shipments.isEmpty()) {
+            return;
+        }
+
+        deliveryEventRepository.save(
+                DeliveryEvent.builder()
+                        .shipment(shipments.get(0))
+                        .eventType(EventType.PICKUP)
+                        .locationId(1)
+                        .notes("Shipment picked up from origin.")
+                        .build());
+
+        deliveryEventRepository.save(
+                DeliveryEvent.builder()
+                        .shipment(shipments.get(0))
+                        .eventType(EventType.INTRANSIT)
+                        .locationId(2)
+                        .notes("Shipment in transit.")
+                        .build());
+    }
+    
+    private void seedPurchaseOrders() {
+
+        if (purchaseOrderRepository.count() != 0) {
+            return;
+        }
+
+        List<Supplier> suppliers = supplierRepository.findAll();
+
+        if (suppliers.isEmpty()) {
+            return;
+        }
+
+        purchaseOrderRepository.save(
+                PurchaseOrder.builder()
+                        .supplier(suppliers.get(0))
+                        .warehouseId(1)
+                        .lineItems("[{\"sku\":\"SKU-0001\",\"qty\":50}]")
+                        .totalValue(new BigDecimal("15000.00"))
+                        .orderDate(LocalDate.now())
+                        .expectedDelivery(LocalDate.now().plusDays(7))
+                        .status(POStatus.PLACED)
+                        .build());
+
+        purchaseOrderRepository.save(
+                PurchaseOrder.builder()
+                        .supplier(suppliers.get(1))
+                        .warehouseId(2)
+                        .lineItems("[{\"sku\":\"SKU-0002\",\"qty\":100}]")
+                        .totalValue(new BigDecimal("22000.00"))
+                        .orderDate(LocalDate.now())
+                        .expectedDelivery(LocalDate.now().plusDays(5))
+                        .status(POStatus.PLACED)
+                        .build());
+    }
+    
+    private void seedInboundReceipts() {
+
+        if (inboundReceiptRepository.count() != 0) {
+            return;
+        }
+
+        List<PurchaseOrder> orders = purchaseOrderRepository.findAll();
+
+        if (orders.isEmpty()) {
+            return;
+        }
+
+        inboundReceiptRepository.save(
+                InboundReceipt.builder()
+                        .supplierOrderId(orders.get(0).getPoId())
+                        .warehouseId(1)
+                        .receivedBy(3)
+                        .receivedDate(LocalDate.now())
+                        .status(ReceiptStatus.RECEIVED)
+                        .build());
+    }
+    
+    private void seedPickLists() {
+
+        if (pickListRepository.count() != 0) {
+            return;
+        }
+
+        List<FreightOrder> orders = freightOrderRepository.findAll();
+
+        if (orders.isEmpty()) {
+            return;
+        }
+
+        pickListRepository.save(
+                PickList.builder()
+                        .freightOrderId(orders.get(0).getFreightOrderId())
+                        .warehouseId(1)
+                        .assignedTo(3)
+                        .status(PickListStatus.COMPLETED)
+                        .createdDate(LocalDate.now())
+                        .build());
+
+        pickListRepository.save(
+                PickList.builder()
+                        .freightOrderId(orders.get(1).getFreightOrderId())
+                        .warehouseId(2)
+                        .assignedTo(3)
+                        .status(PickListStatus.INPROGRESS)
+                        .createdDate(LocalDate.now())
+                        .build());
+    }
+    
+    private void seedShipmentDocuments() {
+
+        if (shipmentDocumentRepository.count() != 0) {
+            return;
+        }
+
+        List<Shipment> shipments = shipmentRepository.findAll();
+
+        if (shipments.isEmpty()) {
+            return;
+        }
+
+        shipmentDocumentRepository.save(
+                ShipmentDocument.builder()
+                        .shipmentId(shipments.get(0).getShipmentId())
+                        .documentType(DocumentType.BOL)
+                        .filePath("/docs/bol-001.pdf")
+                        .submittedDate(LocalDate.now())
+                        .status(DocumentStatus.APPROVED)
+                        .build());
+
+        shipmentDocumentRepository.save(
+                ShipmentDocument.builder()
+                        .shipmentId(shipments.get(0).getShipmentId())
+                        .documentType(DocumentType.COMMERCIALINVOICE)
+                        .filePath("/docs/invoice-001.pdf")
+                        .submittedDate(LocalDate.now())
+                        .status(DocumentStatus.SUBMITTED)
+                        .build());
+    }
+    
+   
+    private void seedComplianceFlags() {
+
+        if (complianceFlagRepository.count() != 0) {
+            return;
+        }
+
+        List<Shipment> shipments = shipmentRepository.findAll();
+
+        if (shipments.isEmpty()) {
+            return;
+        }
+
+        complianceFlagRepository.save(
+                ComplianceFlag.builder()
+                        .shipment(shipments.get(0))
+                        .flagType("Missing Customs Declaration")
+                        .severity(FlagSeverity.HIGH)
+                        .status(FlagStatus.OPEN)
+                        .build());
+
+        if (shipments.size() > 1) {
+            complianceFlagRepository.save(
+                    ComplianceFlag.builder()
+                            .shipment(shipments.get(1))
+                            .flagType("Packaging Review")
+                            .severity(FlagSeverity.LOW)
+                            .status(FlagStatus.RESOLVED)
+                            .build());
+        }
+
+        log.info("Seeded compliance flags");
+    }
+    
+    private void seedLogisticsReports() {
+
+        if (logisticsReportRepository.count() != 0) {
+            return;
+        }
+
+        logisticsReportRepository.save(
+                LogisticsReport.builder()
+                        .scope("GLOBAL")
+                        .metrics("""
+                            {
+                              "shipmentCount":25,
+                              "onTimeRate":96.5,
+                              "avgTransitDays":3.8,
+                              "freightCost":125000,
+                              "exceptionRate":2.5
+                            }
+                            """)
+                        .build());
+
+        logisticsReportRepository.save(
+                LogisticsReport.builder()
+                        .scope("CARRIER")
+                        .metrics("""
+                            {
+                              "shipmentCount":10,
+                              "onTimeRate":94.2
+                            }
+                            """)
+                        .build());
+    }
+    
+    
 }

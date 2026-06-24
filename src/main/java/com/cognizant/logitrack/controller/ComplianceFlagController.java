@@ -31,8 +31,8 @@ public class ComplianceFlagController {
         if (shipmentId != null) {
             return ResponseEntity.ok(flagService.getFlagsByShipment(shipmentId));
         }
-        if (status != null && status.equalsIgnoreCase("OPEN")) {
-            return ResponseEntity.ok(flagService.getOpenFlags());
+        if (status != null && status.equalsIgnoreCase("RESOLVED")) {
+            return ResponseEntity.ok(flagService.getResolvedFlags());
         }
         return ResponseEntity.ok(flagService.getOpenFlags());
     }

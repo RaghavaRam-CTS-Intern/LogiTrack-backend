@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface ComplianceFlagRepository extends JpaRepository<ComplianceFlag, Integer> {
-    List<ComplianceFlag> findByShipmentId(Integer shipmentId);
+    List<ComplianceFlag> findByShipment_ShipmentId(Integer shipmentId);
     List<ComplianceFlag> findByStatus(FlagStatus status);
     List<ComplianceFlag> findBySeverity(FlagSeverity severity);
 }

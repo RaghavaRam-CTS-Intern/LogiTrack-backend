@@ -40,10 +40,14 @@ public class ShipmentDocumentServiceImpl implements ShipmentDocumentService {
         return documentRepository.findByShipmentId(shipmentId).stream().map(this::toDTO).collect(Collectors.toList());
     }
 
+   
     @Override
     public ShipmentDocumentDTO getById(Integer id) {
         return toDTO(findEntity(id));
     }
+    
+    
+    
 
     private ShipmentDocument findEntity(Integer id) {
         return documentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Shipment document not found with id: " + id));

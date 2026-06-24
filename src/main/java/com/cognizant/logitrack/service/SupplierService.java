@@ -1,6 +1,7 @@
 package com.cognizant.logitrack.service;
 
 import com.cognizant.logitrack.dto.SupplierDTO;
+import com.cognizant.logitrack.entity.Supplier;
 import com.cognizant.logitrack.enums.SupplierStatus;
 import java.util.List;
 
@@ -10,4 +11,7 @@ public interface SupplierService {
     SupplierDTO getById(Integer id);
     SupplierDTO updateStatus(Integer id, SupplierStatus status);
     void deleteSupplier(Integer id);
+    
+    List<SupplierDTO> findByStatus(SupplierStatus status);
+    List<SupplierDTO> findByCategory(String category);
 }

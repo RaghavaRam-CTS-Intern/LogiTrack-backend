@@ -19,7 +19,9 @@ public class SupplierServiceImpl implements SupplierService {
     public SupplierServiceImpl(SupplierRepository supplierRepository) {
         this.supplierRepository = supplierRepository;
     }
-
+    
+//    CRUD Create Supplier
+    
     @Override
     public SupplierDTO addSupplier(SupplierDTO dto) {
         Supplier supplier = Supplier.builder().name(dto.getName()).category(dto.getCategory()).contactDetails(dto.getContactDetails()).leadTimeDays(dto.getLeadTimeDays()).status(SupplierStatus.ACTIVE).build();
@@ -27,17 +29,23 @@ public class SupplierServiceImpl implements SupplierService {
         log.info("Supplier added: id={}, name={}", saved.getSupplierId(), saved.getName());
         return toDTO(saved);
     }
+    
+//    CRUD Get All Suppliers
 
     @Override
     public List<SupplierDTO> getAllSuppliers() {
         return supplierRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
     }
+    
+//    CRUD Find By ID
 
     @Override
     public SupplierDTO getById(Integer id) {
         return toDTO(findEntity(id));
     }
 
+//    CRUD Update Status
+    
     @Override
     public SupplierDTO updateStatus(Integer id, SupplierStatus status) {
         Supplier supplier = findEntity(id);
@@ -45,6 +53,8 @@ public class SupplierServiceImpl implements SupplierService {
         return toDTO(supplierRepository.save(supplier));
     }
 
+//    CRUD Delete By ID
+    
     @Override
     public void deleteSupplier(Integer id) {
         Supplier supplier = findEntity(id);
@@ -53,6 +63,19 @@ public class SupplierServiceImpl implements SupplierService {
         log.info("Supplier soft-deleted: id={}", id);
     }
 
+    @Override
+    public List<SupplierDTO> findByStatus(SupplierStatus status) {
+    	return supplierRepository.findByStatus(status).stream().map(this::toDTO).collect(Collectors.toList());
+    }
+    
+	@Override
+	public List<SupplierDTO> findByCategory(String category) {
+		return supplierRepository.findByCategory(category).stream().map(this::toDTO).collect(Collectors.toList());
+	}
+    
+    
+    
+//    Boilerplate Reducing Methods
     private Supplier findEntity(Integer id) {
         return supplierRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Supplier not found with id: " + id));
     }
@@ -60,4 +83,6 @@ public class SupplierServiceImpl implements SupplierService {
     private SupplierDTO toDTO(Supplier s) {
         return SupplierDTO.builder().supplierId(s.getSupplierId()).name(s.getName()).category(s.getCategory()).contactDetails(s.getContactDetails()).leadTimeDays(s.getLeadTimeDays()).status(s.getStatus()).build();
     }
+
+
 }

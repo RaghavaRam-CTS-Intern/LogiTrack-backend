@@ -20,7 +20,9 @@ public class ComplianceFlag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer flagId;
-    private Integer shipmentId;
+    @ManyToOne
+    @JoinColumn(name = "shipmentId")
+    private Shipment shipment;
     @Column(length = 50)
     private String flagType;
     @Enumerated(EnumType.STRING)

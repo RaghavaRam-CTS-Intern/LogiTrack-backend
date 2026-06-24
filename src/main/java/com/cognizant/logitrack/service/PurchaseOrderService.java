@@ -10,4 +10,5 @@ public interface PurchaseOrderService {
     List<PurchaseOrderDTO> getPOsByWarehouse(Integer warehouseId);
     PurchaseOrderDTO updatePOStatus(Integer id, POStatus status);
     PurchaseOrderDTO getById(Integer id);
+	List<PurchaseOrderDTO> getAllPos();
 }

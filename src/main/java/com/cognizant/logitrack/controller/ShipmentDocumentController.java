@@ -31,8 +31,8 @@ public class ShipmentDocumentController {
         return ResponseEntity.ok(documentService.getDocsByShipment(shipmentId));
     }
 
-    @PatchMapping("/{id}/status")
-    public ResponseEntity<ShipmentDocumentDTO> updateStatus(@PathVariable Integer id, @RequestParam String status) {
+    @PatchMapping
+    public ResponseEntity<ShipmentDocumentDTO> updateStatus(@RequestParam Integer id, @RequestParam String status) {
         return ResponseEntity.ok(documentService.updateDocumentStatus(id, DocumentStatus.valueOf(status)));
     }
 }

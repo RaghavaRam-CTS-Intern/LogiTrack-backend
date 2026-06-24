@@ -35,6 +35,16 @@ public class SupplierController {
     public ResponseEntity<SupplierDTO> getById(@PathVariable Integer id) {
         return ResponseEntity.ok(supplierService.getById(id));
     }
+    
+    @GetMapping("/status")
+    public ResponseEntity<List<SupplierDTO>> getByStatus(@RequestParam SupplierStatus status) {
+        return ResponseEntity.ok(supplierService.findByStatus(status));
+    }
+    
+    @GetMapping("/category")
+    public ResponseEntity<List<SupplierDTO>> getByCategory(@RequestParam String category) {
+        return ResponseEntity.ok(supplierService.findByCategory(category));
+    }
 
     @PatchMapping("/{id}")
     public ResponseEntity<SupplierDTO> updateStatus(@PathVariable Integer id, @RequestParam String status) {

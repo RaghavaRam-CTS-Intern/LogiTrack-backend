@@ -9,4 +9,5 @@ public interface ComplianceFlagService {
     List<ComplianceFlagDTO> getFlagsByShipment(Integer shipmentId);
     List<ComplianceFlagDTO> getOpenFlags();
     ComplianceFlagDTO getById(Integer id);
+	List<ComplianceFlagDTO> getResolvedFlags();
 }

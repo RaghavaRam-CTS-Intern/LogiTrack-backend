@@ -33,6 +33,11 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         log.info("Purchase order created: id={}", saved.getPoId());
         return toDTO(saved);
     }
+    
+    @Override
+	public List<PurchaseOrderDTO> getAllPos() {
+    	return purchaseOrderRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
+	}
 
     @Override
     public List<PurchaseOrderDTO> getPOsBySupplier(Integer supplierId) {
@@ -63,4 +68,6 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     private PurchaseOrderDTO toDTO(PurchaseOrder po) {
         return PurchaseOrderDTO.builder().poId(po.getPoId()).supplierId(po.getSupplier() != null ? po.getSupplier().getSupplierId() : null).warehouseId(po.getWarehouseId()).lineItems(po.getLineItems()).totalValue(po.getTotalValue()).orderDate(po.getOrderDate()).expectedDelivery(po.getExpectedDelivery()).status(po.getStatus()).build();
     }
+
+	
 }

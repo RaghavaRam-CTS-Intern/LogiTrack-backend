@@ -35,7 +35,7 @@ public class PurchaseOrderController {
         if (warehouseId != null) {
             return ResponseEntity.ok(purchaseOrderService.getPOsByWarehouse(warehouseId));
         }
-        return ResponseEntity.ok(List.of());
+        return ResponseEntity.status(HttpStatus.CREATED).body(purchaseOrderService.getAllPos());
     }
 
     @GetMapping("/{id}")
@@ -43,7 +43,7 @@ public class PurchaseOrderController {
         return ResponseEntity.ok(purchaseOrderService.getById(id));
     }
 
-    @PatchMapping("/{id}/status")
+    @PatchMapping("/{id}")
     public ResponseEntity<PurchaseOrderDTO> updateStatus(@PathVariable Integer id, @RequestParam String status) {
         return ResponseEntity.ok(purchaseOrderService.updatePOStatus(id, POStatus.valueOf(status)));
     }
