@@ -35,11 +35,7 @@ public class PurchaseOrderController {
         if (warehouseId != null) {
             return ResponseEntity.ok(purchaseOrderService.getPOsByWarehouse(warehouseId));
         }
-<<<<<<< HEAD
-        return ResponseEntity.status(HttpStatus.CREATED).body(purchaseOrderService.getAllPos());
-=======
         return ResponseEntity.ok(purchaseOrderService.getAllPOs());
->>>>>>> 5fba260b34991317ab0f599723ab767946a2a4e3
     }
 
     @GetMapping("/{id}")
