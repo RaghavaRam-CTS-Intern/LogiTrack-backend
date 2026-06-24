@@ -16,7 +16,7 @@ spring:
         format_sql: true
 
 server:
-  port: 8085
+  port: 8089
 
 jwt:
   secret: logitrack_jwt_secret_key_batch11_2026_very_long_secret
